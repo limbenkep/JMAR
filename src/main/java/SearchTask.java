@@ -6,22 +6,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public abstract class SearchTask extends Task<String> {
-    private final String request;
+public abstract class SearchTask extends Task<DataCollection> {
     protected String search;
 
     public SearchTask(String search) {
         this.search = search;
-        this.request = requestResponse();
     }
 
     @Override
-    protected String call() throws Exception {
+    protected DataCollection call() {
         return requestResponse();
     }
 
     // Creating
-    abstract String requestResponse();
+    abstract DataCollection requestResponse();
 
     protected String httpGetRequest(String request) {
         HttpClient client = HttpClient.newHttpClient();

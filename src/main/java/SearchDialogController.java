@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 
 public class SearchDialogController {
-    String searchReturn;
+    DataCollection searchReturn;
     String[] searchMethods = {  "Platsbanken - JobSearch API" };
     @FXML
     private ComboBox<String> comboBox;
@@ -52,7 +52,6 @@ public class SearchDialogController {
         search.setOnSucceeded(e -> {
             searchReturn = search.getValue();
             saveSearch.setDisable(false);
-            System.out.println(searchReturn);
         });
         Thread thread = new Thread(search);
         thread.setDaemon(true);
