@@ -1,1 +1,2 @@
-public record DataCollection(String title, DataEntry[] dataEntries) {}
+import java.util.ArrayList;
+public record DataCollection(String title, ArrayList<DataEntry> dataEntries) {}

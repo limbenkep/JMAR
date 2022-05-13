@@ -1,14 +1,14 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 
+
 public class SearchDialogController {
+    private DataModel dataModel;
     DataCollection searchReturn;
     String[] searchMethods = {  "Platsbanken - JobSearch API" };
     @FXML
@@ -39,7 +39,9 @@ public class SearchDialogController {
             searchButton.setDisable(newText.isEmpty());
         });
     }
-
+    public void setDataModel(DataModel dataModel) {
+        this.dataModel = dataModel;
+    }
     // Show search properties when a search method is selected.
     @FXML
     public void selectSearchMethod() {
@@ -59,7 +61,8 @@ public class SearchDialogController {
     }
     @FXML
     public void saveSearch() {
-        System.out.println("Save is not implemented!");
+        dataModel.addDataCollection(searchReturn);
+        saveSearch.setDisable(true);
     }
 
     @FXML

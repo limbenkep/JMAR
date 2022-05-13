@@ -1,16 +1,25 @@
 import javafx.concurrent.Task;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 public abstract class SearchTask extends Task<DataCollection> {
-    protected String search;
+    protected String originalSearch;
+    protected String encodedSearch;
 
     public SearchTask(String search) {
-        this.search = search;
+        this.originalSearch = search;
+        try {
+            this.encodedSearch = URLEncoder.encode(search, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            this.encodedSearch = "";
+        }
     }
 
     @Override
