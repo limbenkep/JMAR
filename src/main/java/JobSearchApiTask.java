@@ -19,6 +19,7 @@ public class JobSearchApiTask extends SearchTask {
         super(search);
     }
 
+
     @Override
     DataCollection requestResponse() {
         ArrayList<DataEntry> dataEntries;
@@ -27,6 +28,7 @@ public class JobSearchApiTask extends SearchTask {
         JsonNode jsonNode = executeSearch("https://jobsearch.api.jobtechdev.se/search?q=" + encodedSearch + "&limit=" + SUB_SEARCH_LIMIT + "&sort=pubdate-desc");
         System.out.println("https://jobsearch.api.jobtechdev.se/search?q=" + encodedSearch + "&limit=" + SUB_SEARCH_LIMIT + "&sort=pubdate-desc");
         int totalHits = jsonNode.path("total").get("value").asInt();
+        final int progress = totalHits;
         System.out.println("TOTAL HITS = " + totalHits);
 
         dataEntries = new ArrayList<>(totalHits);
@@ -75,6 +77,9 @@ public class JobSearchApiTask extends SearchTask {
                                 + "&sort=pubdate-desc");
 
                 searchOffset += numToGet;
+                // Send updates to GUI
+                updateProgress(postsFetched, progress);
+                updateMessage( postsFetched + " / " + progress);
             }
             searchOffset = 0;
             // Get DateTime of last post to use when constructing new search query
