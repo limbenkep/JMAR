@@ -1,4 +1,3 @@
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -91,13 +90,14 @@ public class SearchDialogController {
     public void activateSearch() {
 
         if(Objects.equals(comboBox.getValue(), jobSearchAPI)) {
-            searchThread(new JobSearchApiTask(searchField.getText()));
+            searchThread(new JobSearch(searchField.getText()));
         } else if (Objects.equals(comboBox.getValue(), historicalAdsAPI)) {
-            searchThread(new HistoricalAdsApiTask(searchField.getText(),
-                    dateFrom.getValue(), dateTo.getValue()));
+            searchThread(new HistoricalAds(searchField.getText(),
+                    dateFrom.getValue().atStartOfDay(),
+                    dateTo.getValue().atTime(23,59,59)));
         }
     }
-    private void searchThread(SearchTask search) {
+    private void searchThread(JobTechAPISearch search) {
         search.setOnSucceeded(e -> {
             searchReturn = search.getValue();
             saveSearch.setDisable(false);
