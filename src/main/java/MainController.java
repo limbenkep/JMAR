@@ -24,9 +24,13 @@ public class MainController {
     @FXML
     private TableView<DataCollection> tableView;
     @FXML
-    private TableColumn<DataCollection, String> dataSet;
+    private TableColumn<DataCollection, String> dataName;
     @FXML
     private TableColumn<DataCollection, Integer> items;
+    @FXML
+    private TableColumn<DataCollection, String> dataSource;
+    @FXML
+    private TableColumn<DataCollection, String> dataDate;
     @FXML
     private Label totalPosts;
     @FXML
@@ -39,8 +43,10 @@ public class MainController {
     @FXML
     private void initialize() {
         // Setup all listeners for changes
-        dataSet.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().title()));
+        dataName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().title()));
         items.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().dataEntries().size()).asObject());
+        dataSource.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().source()));
+        dataDate.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().date()));
         tableView.setItems(dataModel.getDataCollections());
         ObservableList<DataCollection> list = dataModel.getDataCollections();
         list.addListener((ListChangeListener<DataCollection>) change -> {

@@ -19,6 +19,8 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
 
     protected static final int API_SUB_SEARCH_LIMIT = 100; // API limit: max 100 posts per sub search
     protected static final int API_SEARCH_LIMIT = 2000; // API limit: max 2000 posts total per search
+    protected String source;    // Data source name
+    protected String date;
     protected String originalSearch;
     protected String encodedSearch;
     protected int searchOffset = 0; // Search property
@@ -92,13 +94,13 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
             searchOffset = 0;
             // Get DateTime of last post to use when constructing new search query
             lastDate = dataEntries.get(dataEntries.size()-1).date().toString();
-            System.out.println("RUN AGAIN FROM LASTDATE = " + lastDate);
+            System.out.println("RUN AGAIN FROM LASTDATE = " + lastDate); // TODO: Remove debug code
         }
-        return new DataCollection(originalSearch, dataEntries);
+        return new DataCollection(originalSearch, dataEntries, source, date);
     }
     // Creating
-    abstract String initialSearchString();
-    abstract String subSearchString();
+    protected abstract String initialSearchString();
+    protected abstract String subSearchString();
 
     private JsonNode executeSearch(String search) {
         String rawJson = httpGetRequest(search);

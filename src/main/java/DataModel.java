@@ -21,5 +21,4 @@ public class DataModel {
     public int getTotalPosts() {
         return totalPosts;
     }
-
 }
