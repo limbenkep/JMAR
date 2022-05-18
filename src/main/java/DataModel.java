@@ -3,6 +3,7 @@ import javafx.collections.ObservableList;
 
 public class DataModel {
     private final ObservableList<DataCollection> dataCollections;
+    private int totalPosts;
 
     public DataModel() {
         this.dataCollections = FXCollections.observableArrayList();
@@ -13,6 +14,12 @@ public class DataModel {
     }
 
     public void addDataCollection(DataCollection dataCollection) {
+        totalPosts += dataCollection.dataEntries().size();
         dataCollections.add(dataCollection);
     }
+
+    public int getTotalPosts() {
+        return totalPosts;
+    }
+
 }
