@@ -9,11 +9,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 
+import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +28,7 @@ public class MainController {
 
     private DataModel dataModel;
     private final Stage stage;
+    FileChooser pdfFileChooser;
     @FXML
     private TableView<DataCollection> tableView;
     @FXML
@@ -38,7 +46,8 @@ public class MainController {
 
     public MainController(Stage stage) {
         this.stage = stage;
-        dataModel = new DataModel();
+        this.dataModel = new DataModel();
+        this.pdfFileChooser = new FileChooser();
     }
     @FXML
     private void initialize() {
@@ -54,6 +63,10 @@ public class MainController {
             totalPosts.setText("Total posts: " + dataModel.getTotalPosts());
             calculateUniquePosts(list);
         });
+
+        pdfFileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
     }
 
     @FXML
@@ -76,6 +89,32 @@ public class MainController {
         dialogStage.show();
     }
 
+    @FXML
+    public void openPDF() {
+        // Choose file
+        File pdfFile = pdfFileChooser.showOpenDialog(stage);
+        // Generate text from pdf file
+        PDDocument document;
+        PDFTextStripper stripper;
+        String text;
+        try {
+            document = PDDocument.load(pdfFile);
+            stripper = new PDFTextStripper();
+            text = stripper.getText(document);
+        } catch (IOException | NullPointerException e) {
+            return;
+        }
+
+        int id = text.hashCode(); // Generate id for entry to avoid duplicates
+        ArrayList<DataEntry> pdfEntry = new ArrayList<>();
+        pdfEntry.add(new DataEntry(id, pdfFile.getName(), text, LocalDateTime.now()));
+        // Add entry to collection
+        dataModel.addDataCollection(new DataCollection(pdfFile.getName(),
+                                        pdfEntry,
+                                        "PDF-file",
+                                        LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)));
+        System.out.println(text); // TODO: remove debug text
+    }
     private void calculateUniquePosts(ObservableList<DataCollection> list) {
         Set<Integer> unique = new HashSet<>(dataModel.getTotalPosts());
         for (DataCollection collection: list) {
