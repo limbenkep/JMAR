@@ -10,7 +10,7 @@ import java.util.Objects;
 
 
 public class SearchDialogController {
-    private DataModel dataModel;
+    private CollectionDataModel collectionDataModel;
     private DataCollection searchReturn;
     private final String jobSearchAPI = "Platsbanken - JobSearch API";
     private final String historicalAdsAPI = "Platsbanken - Historical ads API";
@@ -83,8 +83,8 @@ public class SearchDialogController {
         }
     }
 
-    public void setDataModel(DataModel dataModel) {
-        this.dataModel = dataModel;
+    public void setDataModel(CollectionDataModel collectionDataModel) {
+        this.collectionDataModel = collectionDataModel;
     }
     @FXML
     public void activateSearch() {
@@ -118,7 +118,7 @@ public class SearchDialogController {
     }
     @FXML
     public void saveSearch() {
-        dataModel.addDataCollection(searchReturn);
+        collectionDataModel.addDataCollection(searchReturn);
         saveSearch.setDisable(true);
     }
 

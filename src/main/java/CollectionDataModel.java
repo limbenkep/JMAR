@@ -1,11 +1,11 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class DataModel {
+public class CollectionDataModel {
     private final ObservableList<DataCollection> dataCollections;
     private int totalPosts;
 
-    public DataModel() {
+    public CollectionDataModel() {
         this.dataCollections = FXCollections.observableArrayList();
     }
 

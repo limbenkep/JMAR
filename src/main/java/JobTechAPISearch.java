@@ -42,7 +42,7 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
     }
 
     private DataCollection requestResponse() {
-        ArrayList<DataEntry> dataEntries;
+        ArrayList<DataCollectionEntry> dataEntries;
         // API is limited to returning max 100 results per search, for bigger results more searches are needed.
         // Need to add (&offset=<value>) parameter to return a different part of search result.
         JsonNode jsonNode = executeSearch(initialSearchString());
@@ -128,8 +128,8 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
             throw new RuntimeException(e);
         }
     }
-    private ArrayList<DataEntry> savePosts(JsonNode jsonNode, int size) {
-        ArrayList<DataEntry> dataEntries = new ArrayList<>(size);
+    private ArrayList<DataCollectionEntry> savePosts(JsonNode jsonNode, int size) {
+        ArrayList<DataCollectionEntry> dataEntries = new ArrayList<>(size);
         Iterator<JsonNode> hits = jsonNode.path("hits").elements();
         while (hits.hasNext()) {
             JsonNode node = hits.next();
@@ -138,7 +138,7 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
             sDate = sDate.substring(1, sDate.length() - 1); // Remove quotation marks in response
             LocalDateTime pubDate = LocalDateTime.parse(sDate);
             System.out.println(pubDate); // TODO: Remove debug code
-            dataEntries.add(new DataEntry(
+            dataEntries.add(new DataCollectionEntry(
                     node.get("id").asInt(),
                     node.get("headline").toString(),
                     node.get("description").get("text").toString(),
