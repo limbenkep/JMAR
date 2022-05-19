@@ -21,7 +21,17 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <Menu mnemonicParsing="false" text="Save">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#saveSkillKeywordsAs" text="Skills (*csv)..." />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Open">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openSkillKeywords" text="Skills (*csv)..." />
+                    </items>
+                  </Menu>
+              <MenuItem mnemonicParsing="false" onAction="#closeProgram" text="Exit" />
             </items>
           </Menu>
         </menus>

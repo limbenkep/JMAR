@@ -20,4 +20,8 @@ public class KeywordDataModel {
         //totalKeywords = keywordCollections.size();
         keywordCollections.remove(entry);
     }
+
+    public void clear() {
+        keywordCollections.clear();
+    }
 }

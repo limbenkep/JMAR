@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
@@ -29,10 +30,9 @@ import java.util.Set;
 
 public class MainController {
 
-    private CollectionDataModel collectionDataModel;
-    private KeywordDataModel keywordDataModel;
+    private final CollectionDataModel collectionDataModel;
+    private final KeywordDataModel keywordDataModel;
     private final Stage stage;
-    FileChooser pdfFileChooser;
     @FXML
     private TableView<DataCollection> dataTable;
     @FXML
@@ -68,7 +68,6 @@ public class MainController {
         this.stage = stage;
         this.collectionDataModel = new CollectionDataModel();
         this.keywordDataModel = new KeywordDataModel();
-        this.pdfFileChooser = new FileChooser();
     }
     @FXML
     private void initialize() {
@@ -94,11 +93,6 @@ public class MainController {
             totalKeywords.setText("Total keywords: " + keywordCollection.size());
             calculateUniqueSkills(keywordCollection);
         });
-
-        // Setup file chooser to only look for PDFs
-        pdfFileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
-        );
     }
 
     @FXML
@@ -123,8 +117,13 @@ public class MainController {
 
     @FXML
     public void openPDF() {
+        // Setup file chooser to only look for PDFs
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
         // Choose file
-        File pdfFile = pdfFileChooser.showOpenDialog(stage);
+        File pdfFile = fileChooser.showOpenDialog(stage);
         // Generate text from pdf file
         PDDocument document;
         PDFTextStripper stripper;
@@ -172,7 +171,6 @@ public class MainController {
         if(event.getCode().equals(KeyCode.DELETE)) {
             KeywordCollection selected = keywordTable.getSelectionModel().getSelectedItem();
             keywordDataModel.removeEntry(selected);
-            //keywordTable.getItems().remove(selected);
         }
     }
 
@@ -187,5 +185,20 @@ public class MainController {
         } else {
             errorMsg.setVisible(true); // Show error message in GUI
         }
+    }
+
+    @FXML
+    private void saveSkillKeywordsAs() {
+        KeywordFileHandler fileHandler = new KeywordFileHandler(stage);
+        fileHandler.saveCSVfile(keywordDataModel.getKeywordCollections());
+    }
+    @FXML
+    private void openSkillKeywords() {
+        KeywordFileHandler fileHandler = new KeywordFileHandler(stage);
+        fileHandler.loadCSVfile(keywordDataModel.getKeywordCollections());
+    }
+    @FXML
+    private void closeProgram() {
+        Platform.exit();
     }
 }
