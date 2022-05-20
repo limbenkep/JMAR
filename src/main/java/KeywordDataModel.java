@@ -13,15 +13,9 @@ public class KeywordDataModel {
     }
 
     public void addEntry(KeywordCollection keywordCollection) {
-        //totalKeywords = keywordCollections.size();
         keywordCollections.add(keywordCollection);
     }
     public void removeEntry(KeywordCollection entry) {
-        //totalKeywords = keywordCollections.size();
         keywordCollections.remove(entry);
-    }
-
-    public void clear() {
-        keywordCollections.clear();
     }
 }

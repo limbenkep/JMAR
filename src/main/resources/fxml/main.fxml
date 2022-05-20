@@ -23,11 +23,13 @@
             <items>
                   <Menu mnemonicParsing="false" text="Save">
                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#saveCollection" text="Collection (*JSON)..." />
                         <MenuItem mnemonicParsing="false" onAction="#saveSkillKeywordsAs" text="Skills (*csv)..." />
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Open">
                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openCollection" text="Collection (*JSON)..." />
                         <MenuItem mnemonicParsing="false" onAction="#openSkillKeywords" text="Skills (*csv)..." />
                     </items>
                   </Menu>
@@ -45,7 +47,7 @@
                         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="244.0" text="Collection" textAlignment="CENTER" />
                      </children>
                   </Pane>
-                  <TableView fx:id="dataTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="344.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="dataTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#tableKeyPressed" prefWidth="344.0" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="dataName" prefWidth="75.0" text="Name" />
                       <TableColumn fx:id="items" prefWidth="50.0" text="Items" />
@@ -83,7 +85,7 @@
                         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="16.0" prefWidth="244.0" text="Skill keywords" textAlignment="CENTER" />
                      </children>
                   </Pane>
-                  <TableView fx:id="keywordTable" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#checkKeyPressed" prefWidth="344.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="keywordTable" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onKeyPressed="#tableKeyPressed" prefWidth="344.0" VBox.vgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="keywordColumn" prefWidth="75.0" text="Keyword" />
                         <TableColumn fx:id="skillColumn" prefWidth="50.0" text="Skill" />

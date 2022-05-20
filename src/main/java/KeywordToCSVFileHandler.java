@@ -4,17 +4,17 @@ import javafx.stage.Stage;
 
 import java.io.*;
 
-public class KeywordFileHandler {
-    private final FileChooser fileChooser;
-    private final Stage stage;
+public class KeywordToCSVFileHandler extends FileHandler<KeywordCollection> {
     private static final String DELIMITER = ";";
 
-    public KeywordFileHandler(Stage stage) {
-        this.fileChooser = new FileChooser();
-        this.stage = stage;
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    public KeywordToCSVFileHandler(Stage stage) {
+        super(stage);
+        fileChooser.getExtensionFilters()
+                .addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
     }
-    public void saveCSVfile(ObservableList<KeywordCollection> collection) {
+
+    @Override
+    public void saveFile(ObservableList<KeywordCollection> collection) {
         File csvFile = fileChooser.showSaveDialog(stage);
         try {
             PrintWriter writer = new PrintWriter(csvFile);
@@ -32,8 +32,8 @@ public class KeywordFileHandler {
         }
     }
 
-    public void loadCSVfile(ObservableList<KeywordCollection> collection) {
-        // Choose file
+    @Override
+    public void loadFile(ObservableList<KeywordCollection> collection) {
         File csvFile = fileChooser.showOpenDialog(stage);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(csvFile));
@@ -43,9 +43,7 @@ public class KeywordFileHandler {
                 String[] parts = line.split(DELIMITER);
                 collection.add(new KeywordCollection(parts[0], parts[1]));
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (ArrayIndexOutOfBoundsException | IOException e) {
             throw new RuntimeException(e);
         }
     }

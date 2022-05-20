@@ -21,4 +21,8 @@ public class CollectionDataModel {
     public int getTotalPosts() {
         return totalPosts;
     }
+
+    public void removeEntry(DataCollection selected) {
+        dataCollections.remove(selected);
+    }
 }

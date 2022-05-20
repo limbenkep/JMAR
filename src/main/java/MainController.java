@@ -69,6 +69,7 @@ public class MainController {
         this.collectionDataModel = new CollectionDataModel();
         this.keywordDataModel = new KeywordDataModel();
     }
+
     @FXML
     private void initialize() {
         // Setup listeners for collection table
@@ -122,7 +123,6 @@ public class MainController {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
         );
-        // Choose file
         File pdfFile = fileChooser.showOpenDialog(stage);
         // Generate text from pdf file
         PDDocument document;
@@ -144,8 +144,8 @@ public class MainController {
                                         pdfEntry,
                                         "PDF-file",
                                         LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)));
-        System.out.println(text); // TODO: remove debug text
     }
+
     private void calculateUniquePosts(ObservableList<DataCollection> list) {
         Set<Integer> unique = new HashSet<>(collectionDataModel.getTotalPosts());
         for (DataCollection collection: list) {
@@ -166,11 +166,17 @@ public class MainController {
 
     // Delete selected keyword entry
     @FXML
-    private void checkKeyPressed(KeyEvent event) {
+    private void tableKeyPressed(KeyEvent event) {
         // Delete selected keyword
+        System.out.println("SOURCE: " + event.getSource());
         if(event.getCode().equals(KeyCode.DELETE)) {
-            KeywordCollection selected = keywordTable.getSelectionModel().getSelectedItem();
-            keywordDataModel.removeEntry(selected);
+            if(event.getSource() == keywordTable) {
+                KeywordCollection selected = keywordTable.getSelectionModel().getSelectedItem();
+                keywordDataModel.removeEntry(selected);
+            } else if(event.getSource() == dataTable) {
+                DataCollection selected = dataTable.getSelectionModel().getSelectedItem();
+                collectionDataModel.removeEntry(selected);
+            }
         }
     }
 
@@ -180,7 +186,6 @@ public class MainController {
         // Check that TextFields are not empty
         if(!keywordEntry.getText().isBlank() && !skillEntry.getText().isBlank()) {
             keywordDataModel.addEntry(new KeywordCollection(keywordEntry.getText(), skillEntry.getText()));
-            //keywordTable.getItems().add(new KeywordCollection(keywordEntry.getText(), skillEntry.getText()));
             errorMsg.setVisible(false);
         } else {
             errorMsg.setVisible(true); // Show error message in GUI
@@ -188,15 +193,29 @@ public class MainController {
     }
 
     @FXML
-    private void saveSkillKeywordsAs() {
-        KeywordFileHandler fileHandler = new KeywordFileHandler(stage);
-        fileHandler.saveCSVfile(keywordDataModel.getKeywordCollections());
+    private void saveCollection() {
+        CollectionToJsonFileHandler fileHandler = new CollectionToJsonFileHandler(stage);
+        fileHandler.saveFile(collectionDataModel.getDataCollections());
     }
+
+    @FXML
+    private void openCollection() {
+        CollectionToJsonFileHandler fileHandler = new CollectionToJsonFileHandler(stage);
+        fileHandler.loadFile(collectionDataModel.getDataCollections());
+    }
+
+    @FXML
+    private void saveSkillKeywordsAs() {
+        KeywordToCSVFileHandler fileHandler = new KeywordToCSVFileHandler(stage);
+        fileHandler.saveFile(keywordDataModel.getKeywordCollections());
+    }
+
     @FXML
     private void openSkillKeywords() {
-        KeywordFileHandler fileHandler = new KeywordFileHandler(stage);
-        fileHandler.loadCSVfile(keywordDataModel.getKeywordCollections());
+        KeywordToCSVFileHandler fileHandler = new KeywordToCSVFileHandler(stage);
+        fileHandler.loadFile(keywordDataModel.getKeywordCollections());
     }
+
     @FXML
     private void closeProgram() {
         Platform.exit();
