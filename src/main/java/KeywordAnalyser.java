@@ -7,6 +7,10 @@ public class KeywordAnalyser {
     private final CollectionDataModel collectionDataModel;
     private final KeywordDataModel keywordDataModel;
     private final ObservableList<SkillStat> stats;
+    private final String[] SUFFIX = {" ", ".", ",", "!", "?", "- ", "(", ")", "/", "\\", ";" };
+    private final String[] APPEND_WORDS = {"utvecklare", "utveckling", "programmerare", "programmering", "kompentens",
+                                        "-utvecklare", "-utveckling", "-programmerare", "-programmering", "-kompetens",
+                                        "utvecklaren", "-utvecklaren"};
 
     public KeywordAnalyser(CollectionDataModel collectionDataModel, KeywordDataModel keywordDataModel) {
         this.collectionDataModel = collectionDataModel;
@@ -28,7 +32,8 @@ public class KeywordAnalyser {
                         // Skip if skill already stored
                         if(!skills.contains(keywordCollection.skill())) {
                             // Check if keyword is in text, and add to stats
-                            if(entry.text().toLowerCase().contains(keywordCollection.keyword().toLowerCase())) {
+                            if(keywordInText(entry.text().toLowerCase(), keywordCollection.keyword().toLowerCase())) {
+                            //if(entry.text().toLowerCase().contains(keywordCollection.keyword().toLowerCase())) {
                                 skills.add(keywordCollection.skill()); // Store skill
                                 int count = 1;
                                 SkillStat newStat = new SkillStat(keywordCollection.skill(), count, 0); // TODO: NEEDED?
@@ -61,5 +66,31 @@ public class KeywordAnalyser {
             stats.set(index, new SkillStat(stat.skill(), stat.count(), percentage));
         }
         return stats;
+    }
+
+    // Check for a keyword in the text by adding suffixes and extra words
+    private boolean keywordInText(String entry, String keyword) {
+        boolean found = false;
+        for(String suffix: SUFFIX) {
+            if(entry.contains(keyword + suffix)) {
+                found = true;
+                break;
+            }
+        }
+        // Run with extra words
+        if(!found) {
+            for(String suffix: SUFFIX) {
+                for(String word: APPEND_WORDS) {
+                    if(entry.contains(keyword + word + suffix)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if(found) {
+                    break;
+                }
+            }
+        }
+        return found;
     }
 }
