@@ -181,7 +181,7 @@ public class MainController {
                 throw new RuntimeException(e);
             }
 
-            dialogStage.setTitle("Compare data");
+            dialogStage.setTitle("Compare data (only unique entries)");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(stage);
             dialogStage.setScene(scene);

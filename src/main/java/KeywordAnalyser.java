@@ -15,34 +15,39 @@ public class KeywordAnalyser {
     }
     public ObservableList<SkillStat> analyse() {
         // For each DataCollection (ex. a search result or file)
+        ArrayList<Integer> entryID = new ArrayList<Integer>(); // holds ids
         for(DataCollection collection : collectionDataModel.getDataCollections()) {
             // For each entry (ex. one post from search result or file content)
             for(DataCollectionEntry entry : collection.dataEntries()) {
-                ArrayList<String> skills = new ArrayList<String>(); // Store skills found for entry
-                // For each keyword
-                for (KeywordCollection keywordCollection: keywordDataModel.getKeywordCollections()) {
-                    // Skip if skill already stored
-                    if(!skills.contains(keywordCollection.skill())) {
-                        // Check if keyword is in text, and add to stats
-                        if(entry.text().toLowerCase().contains(keywordCollection.keyword().toLowerCase())) {
-                            skills.add(keywordCollection.skill()); // Store skill
-                            int count = 1;
-                            SkillStat newStat = new SkillStat(keywordCollection.skill(), count, 0); // TODO: NEEDED?
-                            boolean skillAdded = false;
-                            // Check if skill is a registered stat
-                            for(SkillStat stat: stats) {
-                                // Add to stat if already registered
-                                if(stat.skill().equals(newStat.skill())) {
-                                    int index = stats.indexOf(stat);
-                                    count += stat.count();
-                                    stats.set(index, new SkillStat(stat.skill(), count, 0));
-                                    skillAdded = true;
-                                    break;
+                // Check for duplicate entries
+                if(!entryID.contains(entry.id())) {
+                    entryID.add(entry.id());
+                    ArrayList<String> skills = new ArrayList<String>(); // Store skills found for entry
+                    // For each keyword
+                    for (KeywordCollection keywordCollection: keywordDataModel.getKeywordCollections()) {
+                        // Skip if skill already stored
+                        if(!skills.contains(keywordCollection.skill())) {
+                            // Check if keyword is in text, and add to stats
+                            if(entry.text().toLowerCase().contains(keywordCollection.keyword().toLowerCase())) {
+                                skills.add(keywordCollection.skill()); // Store skill
+                                int count = 1;
+                                SkillStat newStat = new SkillStat(keywordCollection.skill(), count, 0); // TODO: NEEDED?
+                                boolean skillAdded = false;
+                                // Check if skill is a registered stat
+                                for(SkillStat stat: stats) {
+                                    // Add to stat if already registered
+                                    if(stat.skill().equals(newStat.skill())) {
+                                        int index = stats.indexOf(stat);
+                                        count += stat.count();
+                                        stats.set(index, new SkillStat(stat.skill(), count, 0));
+                                        skillAdded = true;
+                                        break;
+                                    }
                                 }
-                            }
-                            // If skill is not present create new entry
-                            if(!skillAdded) {
-                                stats.add(newStat);
+                                // If skill is not present create new entry
+                                if(!skillAdded) {
+                                    stats.add(newStat);
+                                }
                             }
                         }
                     }
@@ -52,7 +57,7 @@ public class KeywordAnalyser {
         // Update percentages
         for(SkillStat stat: stats) {
             int index = stats.indexOf(stat);
-            float percentage = (float) stat.count() / collectionDataModel.getTotalPosts() * 100;
+            float percentage = (float) stat.count() / entryID.size() * 100; // Only calculate unique posts
             stats.set(index, new SkillStat(stat.skill(), stat.count(), percentage));
         }
         return stats;
