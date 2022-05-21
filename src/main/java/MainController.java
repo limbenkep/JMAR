@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -53,6 +50,8 @@ public class MainController {
     private Label totalPosts;
     @FXML
     private Label uniquePosts;
+    @FXML
+    private Button compareButton;
     @FXML
     private TextField keywordEntry;
     @FXML
@@ -162,6 +161,33 @@ public class MainController {
             unique.add(collection.skill());
         }
         totalUniqueSkills.setText("Total unique skills: " + unique.size());
+    }
+
+    @FXML
+    private void startCompare() {
+        if(!dataTable.getItems().isEmpty() && !keywordTable.getItems().isEmpty()) {
+            Stage dialogStage = new Stage();
+            AnalysisDialogController controller = new AnalysisDialogController(dialogStage);
+            controller.setDataModels(collectionDataModel, keywordDataModel);
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/analysis-result-dialog.fxml"));
+            loader.setController(controller);
+
+            Scene scene = null;
+            try {
+                scene = new Scene(loader.<VBox>load());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            dialogStage.setTitle("Compare data");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(stage);
+            dialogStage.setScene(scene);
+            dialogStage.initStyle(StageStyle.UTILITY);
+            dialogStage.show();
+        }
     }
 
     // Delete selected keyword entry
