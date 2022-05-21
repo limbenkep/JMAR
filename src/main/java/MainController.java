@@ -135,7 +135,7 @@ public class MainController {
             return;
         }
 
-        int id = text.hashCode(); // Generate id for keyword to avoid duplicates
+        String id = String.valueOf(text.hashCode()); // Generate id for keyword to avoid duplicates
         ArrayList<DataCollectionEntry> pdfEntry = new ArrayList<>();
         pdfEntry.add(new DataCollectionEntry(id, pdfFile.getName(), text, LocalDateTime.now()));
         // Add keyword to collection
@@ -146,7 +146,7 @@ public class MainController {
     }
 
     private void calculateUniquePosts(ObservableList<DataCollection> list) {
-        Set<Integer> unique = new HashSet<>(collectionDataModel.getTotalPosts());
+        Set<String> unique = new HashSet<>(collectionDataModel.getTotalPosts());
         for (DataCollection collection: list) {
             for(DataCollectionEntry entry  : collection.dataEntries()) {
                 unique.add(entry.id());

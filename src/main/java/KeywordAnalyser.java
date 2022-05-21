@@ -19,7 +19,7 @@ public class KeywordAnalyser {
     }
     public ObservableList<SkillStat> analyse() {
         // For each DataCollection (ex. a search result or file)
-        ArrayList<Integer> entryID = new ArrayList<Integer>(); // holds ids
+        ArrayList<String> entryID = new ArrayList<String>(); // holds ids
         for(DataCollection collection : collectionDataModel.getDataCollections()) {
             // For each entry (ex. one post from search result or file content)
             for(DataCollectionEntry entry : collection.dataEntries()) {

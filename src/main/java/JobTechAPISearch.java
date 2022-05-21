@@ -139,7 +139,7 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
             LocalDateTime pubDate = LocalDateTime.parse(sDate);
             System.out.println(pubDate); // TODO: Remove debug code
             dataEntries.add(new DataCollectionEntry(
-                    node.get("id").asInt(),
+                    node.get("id").toString(),
                     node.get("headline").toString(),
                     node.get("description").get("text").toString(),
                     pubDate));
