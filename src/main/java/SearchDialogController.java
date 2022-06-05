@@ -16,7 +16,7 @@ public class SearchDialogController {
     private final String historicalAdsAPI = "Platsbanken - Historical ads API";
     private final String[] searchMethods = {  jobSearchAPI, historicalAdsAPI };
     private final LocalDate dateFromRestriction = LocalDate.of(2016,1,1);
-    private final LocalDate dateToRestriction = LocalDate.of(2021,12,31);
+    private final LocalDate dateToRestriction = LocalDate.of(2022,3,31);
     @FXML
     private ComboBox<String> comboBox;
     @FXML
