@@ -1,12 +1,17 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class KeywordAnalyser {
     private final CollectionDataModel collectionDataModel;
+    private final CollectionDataModel resultDataModel;
     private final KeywordDataModel keywordDataModel;
     private final ObservableList<SkillStat> stats;
+    private String resultSource  ="Result collection from analysing collections ";
+
+    private final ArrayList<ArrayList<DataCollectionEntry>> dataEntries;
     private final String[] PREFIX = {" ", "n", "(", "/", "\\","-", ",", ".", ")", "!", "?" };
     private final String[] SUFFIX = {" ", ",", "\\", ".", "/",")", "?","- ", "!", "(", ";" };
     /*private final String[] APPEND_WORDS = {"utvecklare", "utveckling", "programmerare", "programmering", "kompetens",
@@ -21,13 +26,16 @@ public class KeywordAnalyser {
 
     public KeywordAnalyser(CollectionDataModel collectionDataModel, KeywordDataModel keywordDataModel) {
         this.collectionDataModel = collectionDataModel;
+        this.resultDataModel = new CollectionDataModel();
         this.keywordDataModel = keywordDataModel;
         this.stats = FXCollections.observableArrayList();
+        this.dataEntries = new ArrayList<>();
     }
     public ObservableList<SkillStat> analyse() {
         // For each DataCollection (ex. a search result or file)
         ArrayList<String> entryID = new ArrayList<String>(); // holds ids
         for(DataCollection collection : collectionDataModel.getDataCollections()) {
+            resultSource = resultSource + " " + collection.title();
             // For each entry (ex. one post from search result or file content)
             for(DataCollectionEntry entry : collection.dataEntries()) {
                 // Check for duplicate entries
@@ -52,6 +60,7 @@ public class KeywordAnalyser {
                                         int index = stats.indexOf(stat);
                                         count += stat.count();
                                         stats.set(index, new SkillStat(stat.skill(), count, 0));
+                                        dataEntries.get(index).add(entry);
                                         skillAdded = true;
                                         break;
                                     }
@@ -59,6 +68,9 @@ public class KeywordAnalyser {
                                 // If skill is not present create new entry
                                 if(!skillAdded) {
                                     stats.add(newStat);
+                                    ArrayList<DataCollectionEntry> entries = new ArrayList<>();
+                                    entries.add(entry);
+                                    dataEntries.add(entries);
                                 }
                             }
                         }
@@ -71,9 +83,13 @@ public class KeywordAnalyser {
             int index = stats.indexOf(stat);
             float percentage = (float) stat.count() / entryID.size() * 100; // Only calculate unique posts
             stats.set(index, new SkillStat(stat.skill(), stat.count(), percentage));
+            String source = resultSource + " with skill " + stat.skill();
+            resultDataModel.addDataCollection(new DataCollection(stat.skill(), dataEntries.get(index), source , java.time.LocalDate.now().toString()));
         }
         return stats;
     }
+
+
 
     // Check for a keyword in the text by adding suffixes and extra words
     private boolean keywordInText(String entry, String keyword) {
@@ -99,6 +115,10 @@ public class KeywordAnalyser {
             }
         }
         return found;
+    }
+
+    public CollectionDataModel getResultDataModel(){
+        return resultDataModel;
     }
     // Check for a keyword in the text by adding suffixes and extra words
     /*private boolean keywordInText(String entry, String keyword) {
