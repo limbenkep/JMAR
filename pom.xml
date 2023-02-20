@@ -9,9 +9,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <javafx.version>17.0.1</javafx.version>
+        <maven.compiler.source>19</maven.compiler.source>
+        <maven.compiler.target>19</maven.compiler.target>
+        <javafx.version>19.0.2</javafx.version>
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <jackson.version>2.13.2</jackson.version>
         <pdfbox.version>2.0.22</pdfbox.version>

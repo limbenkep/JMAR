@@ -18,4 +18,10 @@ public class KeywordDataModel {
     public void removeEntry(KeywordCollection entry) {
         keywordCollections.remove(entry);
     }
+    /**
+     * Deletes all entries skills and keywords in the list of entered keyword collection
+     */
+    public void clearKeyWordCollection(){
+        keywordCollections.clear();
+    }
 }

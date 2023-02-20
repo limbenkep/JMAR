@@ -27,4 +27,11 @@ public class CollectionDataModel {
     public void removeEntry(DataCollection selected) {
         dataCollections.remove(selected);
     }
+
+    /**
+     * Deletes all entries in the list of retrieved text collection
+     */
+    public void clearDataModel(){
+        dataCollections.clear();
+    }
 }

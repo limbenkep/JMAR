@@ -33,6 +33,14 @@
                         <MenuItem mnemonicParsing="false" onAction="#openSkillKeywords" text="Skills (*csv)..." />
                     </items>
                   </Menu>
+                <Menu mnemonicParsing="false" text="Clear">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#saveAndClearCollection" text="Save and clear collection (*JSON)..." />
+                        <MenuItem mnemonicParsing="false" onAction="#saveAndClearSkillKeywords" text="Save and clear skills (*csv)..." />
+                        <MenuItem mnemonicParsing="false" onAction="#clearCollection" text="Clear Collection (*JSON)..." />
+                        <MenuItem mnemonicParsing="false" onAction="#clearSkillKeywords" text="Clear skills (*csv)..." />
+                    </items>
+                </Menu>
               <MenuItem mnemonicParsing="false" onAction="#closeProgram" text="Exit" />
             </items>
           </Menu>

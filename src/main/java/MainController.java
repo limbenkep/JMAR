@@ -246,4 +246,26 @@ public class MainController {
     private void closeProgram() {
         Platform.exit();
     }
+
+    @FXML
+    private void clearCollection(){
+        collectionDataModel.clearDataModel();
+    }
+    @FXML
+    private void saveAndClearCollection(){
+        saveCollection();
+        collectionDataModel.clearDataModel();
+    }
+
+    @FXML
+    private void clearSkillKeywords(){
+        keywordDataModel.clearKeyWordCollection();
+    }
+
+    @FXML
+    private void saveAndClearSkillKeywords(){
+        saveSkillKeywordsAs();
+        keywordDataModel.clearKeyWordCollection();
+    }
+
 }
