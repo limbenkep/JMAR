@@ -268,4 +268,16 @@ public class MainController {
         keywordDataModel.clearKeyWordCollection();
     }
 
+    @FXML
+    private void deleteSelectedItemFromCollectionTable(){
+        DataCollection selectedItem = dataTable.getSelectionModel().getSelectedItem();
+        dataTable.getItems().remove(selectedItem);
+    }
+
+    @FXML
+    private void deleteSelectedItemFromSkillsTable(){
+        KeywordCollection selectedItem = keywordTable.getSelectionModel().getSelectedItem();
+        keywordTable.getItems().remove(selectedItem);
+    }
+
 }
