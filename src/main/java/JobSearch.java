@@ -4,12 +4,25 @@ import java.time.temporal.ChronoUnit;
 
 public class JobSearch extends JobTechAPISearch {
     private static final String SOURCE = "JobSearch API";
-    public JobSearch(String search) {
+    private final LocalDateTime from, to;
+    private String formattedDate_From, formattedDate_To;
+
+    public JobSearch(String search,LocalDateTime from, LocalDateTime to) {
         super(search);
         this.source = SOURCE;
         // Get current time without milliseconds
-        this.lastDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(DateTimeFormatter.ISO_DATE_TIME);
-        this.date = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE);
+        this.from = from;
+        this.to = to;
+
+        this.lastDate = String.valueOf(to);
+        this.date = from.format(DateTimeFormatter.ISO_DATE)
+                + " - "
+                + to.format(DateTimeFormatter.ISO_DATE);
+
+        // Convert to Format used by the API (YYYY-MM-DDTHH:MM:SS)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        formattedDate_From = from.format(formatter);
+        formattedDate_To = to.format(formatter);
     }
 
     @Override
@@ -17,6 +30,9 @@ public class JobSearch extends JobTechAPISearch {
         return "https://jobsearch.api.jobtechdev.se/search?"
                 + "q=" + encodedSearch
                 + "&limit=" + API_SUB_SEARCH_LIMIT
+                + "&published-after=" + formattedDate_From
+                + "&published-before=" + formattedDate_To
+
                 + "&sort=pubdate-desc";
     }
 

@@ -16,7 +16,7 @@ public class SearchDialogController {
     private final String historicalAdsAPI = "Platsbanken - Historical ads API";
     private final String[] searchMethods = {  jobSearchAPI, historicalAdsAPI };
     private final LocalDate dateFromRestriction = LocalDate.of(2016,1,1);
-    private final LocalDate dateToRestriction = LocalDate.of(2022,3,31);
+    private final LocalDate dateToRestriction = LocalDate.now();
     @FXML
     private ComboBox<String> comboBox;
     @FXML
@@ -71,10 +71,11 @@ public class SearchDialogController {
     public void selectSearchMethod() {
         searchProperties.setVisible(true);
         if(Objects.equals(comboBox.getValue(), jobSearchAPI)) {
-            dateFrom.setVisible(false);
-            dateTo.setVisible(false);
-            labelDateFrom.setVisible(false);
-            labelDateTo.setVisible(false);
+            dateFrom.setVisible(true);      // converted from false to true
+            dateTo.setVisible(true);        // converted from false to true
+            labelDateFrom.setVisible(true);
+            labelDateTo.setVisible(true);
+
         } else if (Objects.equals(comboBox.getValue(), historicalAdsAPI)) {
             dateFrom.setVisible(true);
             dateTo.setVisible(true);
@@ -90,7 +91,8 @@ public class SearchDialogController {
     public void activateSearch() {
 
         if(Objects.equals(comboBox.getValue(), jobSearchAPI)) {
-            searchThread(new JobSearch(searchField.getText()));
+            searchThread(new JobSearch(searchField.getText(), dateFrom.getValue().atStartOfDay(),
+                    dateTo.getValue().atTime(23,59,59)));
         } else if (Objects.equals(comboBox.getValue(), historicalAdsAPI)) {
             searchThread(new HistoricalAds(searchField.getText(),
                     dateFrom.getValue().atStartOfDay(),
