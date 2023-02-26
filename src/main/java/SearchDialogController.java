@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
@@ -21,6 +22,7 @@ public class SearchDialogController {
     private ComboBox<String> comboBox;
     @FXML
     private TextField searchField;
+
     @FXML
     private Button searchButton, saveSearch;
     @FXML
@@ -89,14 +91,24 @@ public class SearchDialogController {
     }
     @FXML
     public void activateSearch() {
+        LocalDateTime from = LocalDateTime.now().minusYears(3);
+        LocalDateTime to = LocalDateTime.now();
+        if(dateFrom.getValue() != null)
+        {
+            from = dateFrom.getValue().atStartOfDay();
+        }
+        if(dateTo.getValue() != null)
+        {
+            to = dateTo.getValue().atTime(23,59,59);
+        }
 
-        if(Objects.equals(comboBox.getValue(), jobSearchAPI)) {
-            searchThread(new JobSearch(searchField.getText(), dateFrom.getValue().atStartOfDay(),
-                    dateTo.getValue().atTime(23,59,59)));
-        } else if (Objects.equals(comboBox.getValue(), historicalAdsAPI)) {
-            searchThread(new HistoricalAds(searchField.getText(),
-                    dateFrom.getValue().atStartOfDay(),
-                    dateTo.getValue().atTime(23,59,59)));
+        if(Objects.equals(comboBox.getValue(), jobSearchAPI))
+        {
+            searchThread(new JobSearch(searchField.getText(), from, to));
+        }
+        else if (Objects.equals(comboBox.getValue(), historicalAdsAPI))
+        {
+            searchThread(new HistoricalAds(searchField.getText(), from, to));
         }
     }
     private void searchThread(JobTechAPISearch search) {

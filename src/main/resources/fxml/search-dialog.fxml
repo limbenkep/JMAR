@@ -26,9 +26,12 @@
             <DatePicker fx:id="dateTo" editable="false" layoutX="105.0" layoutY="80.0" promptText="select date" visible="false" />
             <Label fx:id="labelDateFrom" layoutX="14.0" layoutY="52.0" text="From" visible="false" />
             <Label fx:id="labelDateTo" layoutX="14.0" layoutY="82.0" text="To" visible="false" />
-            <ProgressBar fx:id="progressBar" layoutX="50.0" layoutY="150.0" prefWidth="200.0" progress="0.0" />
-            <Label fx:id="progressDownload" layoutX="50.0" layoutY="170.0" text="0/0" />
-            <Label fx:id="progressPercentage" layoutX="140.0" layoutY="150.0" text="0%" />
+
+
+
+            <ProgressBar fx:id="progressBar" layoutX="50.0" layoutY="170.0" prefWidth="200.0" progress="0.0" />
+            <Label fx:id="progressDownload" layoutX="50.0" layoutY="190.0" text="0/0" />
+            <Label fx:id="progressPercentage" layoutX="140.0" layoutY="170.0" text="0%" />
          </children>
       </AnchorPane>
       <ButtonBar prefHeight="40.0" prefWidth="200.0">
