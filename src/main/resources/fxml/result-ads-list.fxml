@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-    <GridPane>
-        <Label text="Select result collection"></Label>
-        <ComboBox fx:id="resultCollectionOptions" GridPane.rowIndex="0" GridPane.columnIndex="1"></ComboBox>
-    </GridPane>
 
-    <TableView fx:id="resultAdsTable" prefHeight="510.0" prefWidth="600.0">
-        <columns>
-
-            <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title"/>
-            <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date of publication"/>
-        </columns>
-        <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-        </columnResizePolicy>
-    </TableView>
-    <ButtonBar prefHeight="91.0" prefWidth="600.0">
-        <buttons>
-            <Button mnemonicParsing="false" onAction="#close" text="Close"/>
-        </buttons>
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
-        </padding>
-    </ButtonBar>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+       <GridPane>
+          <children>
+              <Label text="Select result collection" />
+              <ComboBox fx:id="resultCollectionOptions" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <TextField fx:id="locationTextField" promptText="Location" GridPane.columnIndex="3">
+               <GridPane.margin>
+                  <Insets left="40.0" right="10.0" />
+               </GridPane.margin>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#filterResultsByLocation" text="Filter" GridPane.columnIndex="4" />
+          </children>
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+         </rowConstraints>
+       </GridPane>
+   
+       <TableView fx:id="resultAdsTable" prefHeight="531.0" prefWidth="600.0">
+           <columns>
+               <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
+               <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Date of publication" />
+               <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Location" />
+           </columns>
+           <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+           </columnResizePolicy>
+       </TableView>
+       <ButtonBar prefHeight="91.0" prefWidth="600.0">
+           <buttons>
+               <Button mnemonicParsing="false" onAction="#close" text="Close" />
+           </buttons>
+           <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+           </padding>
+       </ButtonBar>
+   </children>
 </VBox>
-
-

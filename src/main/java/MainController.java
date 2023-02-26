@@ -127,6 +127,10 @@ public class MainController {
         PDDocument document;
         PDFTextStripper stripper;
         String text;
+
+        // TODO: adding location
+        String location = "";
+
         try {
             document = PDDocument.load(pdfFile);
             stripper = new PDFTextStripper();
@@ -137,7 +141,7 @@ public class MainController {
 
         String id = String.valueOf(text.hashCode()); // Generate id for keyword to avoid duplicates
         ArrayList<DataCollectionEntry> pdfEntry = new ArrayList<>();
-        pdfEntry.add(new DataCollectionEntry(id, pdfFile.getName(), text, LocalDateTime.now()));
+        pdfEntry.add(new DataCollectionEntry(id, pdfFile.getName(), text, LocalDateTime.now(), location));
         // Add keyword to collection
         collectionDataModel.addDataCollection(new DataCollection(pdfFile.getName(),
                                         pdfEntry,

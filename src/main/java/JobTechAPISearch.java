@@ -2,6 +2,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,6 +28,7 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
     protected int searchOffset = 0; // Search property
     protected int postLimit; // Search property
     protected String lastDate; // Search property
+
 
     protected JobTechAPISearch(String search) {
         this.originalSearch = search;
@@ -54,7 +57,7 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
         dataEntries = new ArrayList<>(totalHits);
         int postsFetched = 0;
         // Store first sub search
-        if(totalHits < API_SUB_SEARCH_LIMIT) {
+        if (totalHits < API_SUB_SEARCH_LIMIT) {
             dataEntries.addAll(savePosts(jsonNode, totalHits));
             postsFetched += totalHits;
         } else {
@@ -64,7 +67,7 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
 
         // If there are more posts to fetch
         searchOffset = postsFetched; // Search offset
-        while(postsFetched < totalHits) {
+        while (postsFetched < totalHits) {
             // Encode date to UTF8
             try {
                 lastDate = URLEncoder.encode(lastDate, StandardCharsets.UTF_8.toString());
@@ -74,9 +77,9 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
             boolean lastSearch = postsFetched + API_SEARCH_LIMIT > totalHits;
             postLimit = API_SUB_SEARCH_LIMIT;
             // Get SEARCH_LIMIT number of posts before constructing new search
-            while(searchOffset < API_SEARCH_LIMIT && postsFetched < totalHits) {
+            while (searchOffset < API_SEARCH_LIMIT && postsFetched < totalHits) {
                 // Get exact number of last posts in search.
-                if(lastSearch && (totalHits - postsFetched) < API_SUB_SEARCH_LIMIT) {
+                if (lastSearch && (totalHits - postsFetched) < API_SUB_SEARCH_LIMIT) {
                     postLimit = totalHits - postsFetched;
                 }
                 JsonNode jNode = executeSearch(subSearchString());
@@ -89,17 +92,19 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
                 searchOffset += postLimit;
                 // Send updates to GUI
                 updateProgress(postsFetched, progress);
-                updateMessage( postsFetched + " / " + progress);
+                updateMessage(postsFetched + " / " + progress);
             }
             searchOffset = 0;
             // Get DateTime of last post to use when constructing new search query
-            lastDate = dataEntries.get(dataEntries.size()-1).date().toString();
+            lastDate = dataEntries.get(dataEntries.size() - 1).date().toString();
             System.out.println("RUN AGAIN FROM LASTDATE = " + lastDate); // TODO: Remove debug code
         }
         return new DataCollection(originalSearch, dataEntries, source, date);
     }
+
     // Creating
     protected abstract String initialSearchString();
+
     protected abstract String subSearchString();
 
     private JsonNode executeSearch(String search) {
@@ -114,6 +119,7 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
         }
         return jsonNode;
     }
+
     private String httpGetRequest(String request) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest getRequest = HttpRequest.newBuilder()
@@ -128,21 +134,28 @@ public abstract class JobTechAPISearch extends Task<DataCollection> {
             throw new RuntimeException(e);
         }
     }
+
     private ArrayList<DataCollectionEntry> savePosts(JsonNode jsonNode, int size) {
         ArrayList<DataCollectionEntry> dataEntries = new ArrayList<>(size);
         Iterator<JsonNode> hits = jsonNode.path("hits").elements();
         while (hits.hasNext()) {
             JsonNode node = hits.next();
             System.out.println(node.get("headline")); // TODO: Remove debug code
+            System.out.println(node.get("workplace_address").get("region").toString());
+
+
             String sDate = node.get("publication_date").toString();
             sDate = sDate.substring(1, sDate.length() - 1); // Remove quotation marks in response
             LocalDateTime pubDate = LocalDateTime.parse(sDate);
             System.out.println(pubDate); // TODO: Remove debug code
+
             dataEntries.add(new DataCollectionEntry(
                     node.get("id").toString(),
                     node.get("headline").toString(),
                     node.get("description").get("text").toString(),
-                    pubDate));
+                    pubDate,
+                    node.get("workplace_address").get("region").toString()));
+
         }
         return dataEntries;
     }
