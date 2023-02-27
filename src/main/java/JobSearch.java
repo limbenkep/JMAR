@@ -5,7 +5,9 @@ import java.time.temporal.ChronoUnit;
 public class JobSearch extends JobTechAPISearch {
     private static final String SOURCE = "JobSearch API";
     private final LocalDateTime from, to;
+
     private String formattedDate_From, formattedDate_To;
+
 
     public JobSearch(String search,LocalDateTime from, LocalDateTime to) {
         super(search);
@@ -13,6 +15,7 @@ public class JobSearch extends JobTechAPISearch {
         // Get current time without milliseconds
         this.from = from;
         this.to = to;
+
 
         this.lastDate = String.valueOf(to);
         this.date = from.format(DateTimeFormatter.ISO_DATE)
@@ -32,7 +35,6 @@ public class JobSearch extends JobTechAPISearch {
                 + "&limit=" + API_SUB_SEARCH_LIMIT
                 + "&published-after=" + formattedDate_From
                 + "&published-before=" + formattedDate_To
-
                 + "&sort=pubdate-desc";
     }
 

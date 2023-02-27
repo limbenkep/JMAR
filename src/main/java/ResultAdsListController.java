@@ -13,7 +13,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+<<<<<<< HEAD
 import javafx.stage.StageStyle;
+import org.w3c.dom.Text;
+=======
+import javafx.stage.StageStyle;
+import org.w3c.dom.Text;
+>>>>>>> Filter_by_location
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -39,7 +45,13 @@ public class ResultAdsListController {
     private TableView<DataCollectionEntry> resultAdsTable;
 
     @FXML
+    private TextField locationTextField;
+
+    @FXML
     private TableColumn<DataCollectionEntry, String> titleColumn;
+
+    @FXML
+    private TableColumn<DataCollectionEntry, String> locationColumn;
     @FXML
     private TableColumn<DataCollectionEntry, LocalDateTime> dateColumn;
 
@@ -47,12 +59,20 @@ public class ResultAdsListController {
         this.stage = stage;
         comboboxOptions = FXCollections.observableArrayList();
     }
+
     @FXML
-    public void initialize(){
+    public void initialize() {
         resultCollectionOptions.setItems(comboboxOptions);
         resultCollectionOptions.getSelectionModel().selectFirst();
         resultAdsTable.setItems(adsEntries);
         titleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().title()));
+
+        // Adding Locations to the Table (if location is null --> convert to "")
+        locationColumn.setCellValueFactory(cellData -> {
+            String location = cellData.getValue().location();
+            return new SimpleStringProperty(location == null ? "" : location);
+        });
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/DD");
         dateColumn.setCellFactory(cellData -> {
             return new TableCell<DataCollectionEntry, LocalDateTime>() {
@@ -78,26 +98,34 @@ public class ResultAdsListController {
 
     }
 
+<<<<<<< HEAD
     /**
      * Sets the the job ads entries from the text analysis to be displayed
      * @param dataModel
      */
     public void setDataModel(CollectionDataModel dataModel){
+=======
+    public void setDataModel(CollectionDataModel dataModel) {
+>>>>>>> Filter_by_location
         resultDataModel = dataModel;
-        boolean is = resultDataModel==null;
+        boolean is = resultDataModel == null;
         //Set default as the first skill ads entries
         this.adsEntries = FXCollections.observableArrayList(resultDataModel.getDataCollections().get(0).dataEntries());
-        for(DataCollection collection: dataModel.getDataCollections()){
+        for (DataCollection collection : dataModel.getDataCollections()) {
             comboboxOptions.add(collection.title());
         }
     }
 
+<<<<<<< HEAD
     /**
      * Called when an ad on the ads Table is clicked.
      * When double clicked, the ad is opened to display it full content
      * @param event click event
      */
     private void handleTableRowMouseDoubleClick(MouseEvent event){
+=======
+    private void handleTableRowMouseDoubleClick(MouseEvent event) {
+>>>>>>> Filter_by_location
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             @SuppressWarnings("unchecked")
             TableRow<DataCollectionEntry> row = (TableRow<DataCollectionEntry>) event.getSource();
@@ -124,8 +152,26 @@ public class ResultAdsListController {
         }
     }
 
+
     @FXML
     public void close() {
         stage.close();
     }
+
+    @FXML
+    public void filterResultsByLocation()
+    {
+        String locationWordToFilter = locationTextField.getText().toLowerCase();
+
+        ObservableList<DataCollectionEntry> filteredEntries = FXCollections.observableArrayList();
+        for (DataCollectionEntry entry : adsEntries) {
+            if (entry.location().toLowerCase().contains(locationWordToFilter)) {
+                filteredEntries.add(entry);
+            }
+        }
+
+        resultAdsTable.setItems(filteredEntries);
+
+    }
+
 }
