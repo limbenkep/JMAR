@@ -10,8 +10,8 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0"
       prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <GridPane>
-        <Label text="Select result collection"></Label>
-        <ComboBox fx:id="resultCollectionOptions" GridPane.rowIndex="0" GridPane.columnIndex="1"></ComboBox>
+        <Label text="Select result collection"/>
+        <ComboBox fx:id="resultCollectionOptions" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
     </GridPane>
 
     <TableView fx:id="resultAdsTable" prefHeight="510.0" prefWidth="600.0">

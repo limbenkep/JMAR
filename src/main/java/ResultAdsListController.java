@@ -10,7 +10,14 @@ import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
+/**
+ * @author Honorine Lima
+ *
+ * This class displays the  the titles of the ads that were a hit for each skills on a table
+ * and each ad row can be clicked to display the full content of the ad
+ */
 public class ResultAdsListController {
     private final Stage stage;
     private CollectionDataModel resultDataModel;
@@ -62,6 +69,11 @@ public class ResultAdsListController {
 
 
     }
+
+    /**
+     * Sets the the job ads entries from the text analysis to be displayed
+     * @param dataModel
+     */
     public void setDataModel(CollectionDataModel dataModel){
         resultDataModel = dataModel;
         boolean is = resultDataModel==null;
@@ -72,6 +84,11 @@ public class ResultAdsListController {
         }
     }
 
+    /**
+     * Called when an ad on the ads Table is clicked.
+     * When double clicked, the ad is opened to display it full content
+     * @param event click event
+     */
     private void handleTableRowMouseDoubleClick(MouseEvent event){
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             @SuppressWarnings("unchecked")
