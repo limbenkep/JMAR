@@ -3,11 +3,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -79,6 +87,21 @@ public class ResultAdsListController {
 
             if (!row.isEmpty() && row.getItem() != null) {
                 System.out.println("Row: " + row.getItem());
+                DataCollectionEntry entry = row.getItem();
+
+                Stage adPageStage = new Stage();
+                ScrollPane root = new ScrollPane();
+                Scene scene = new Scene(root, 500, 500);
+                Text text = new Text(
+                        "Ad Id: " + entry.id().replace("\"", "") + "\n"
+                                + "Title: " + entry.title().replace("\"", "") + "\n"
+                                + "Description" + "\n" + entry.text().replace("\\n", "\n").replace("\\r", "").replace("\"", ""));
+                text.wrappingWidthProperty().bind(scene.widthProperty());
+                root.setFitToWidth(true);
+                root.setContent(text);
+                adPageStage.setTitle("View ad content");
+                adPageStage.setScene(scene);
+                adPageStage.show();
                 event.consume();
             }
         }
