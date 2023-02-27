@@ -13,13 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-<<<<<<< HEAD
 import javafx.stage.StageStyle;
-import org.w3c.dom.Text;
-=======
-import javafx.stage.StageStyle;
-import org.w3c.dom.Text;
->>>>>>> Filter_by_location
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -52,8 +46,6 @@ public class ResultAdsListController {
 
     @FXML
     private TableColumn<DataCollectionEntry, String> locationColumn;
-    @FXML
-    private TableColumn<DataCollectionEntry, LocalDateTime> dateColumn;
 
     public ResultAdsListController(Stage stage) {
         this.stage = stage;
@@ -72,22 +64,7 @@ public class ResultAdsListController {
             String location = cellData.getValue().location();
             return new SimpleStringProperty(location == null ? "" : location);
         });
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/DD");
-        dateColumn.setCellFactory(cellData -> {
-            return new TableCell<DataCollectionEntry, LocalDateTime>() {
-                @Override
-                protected void updateItem(LocalDateTime item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setText(null);
-                    } else {
-                        //setText(formatter.format(item));
-                        setText(String.format(item.format(formatter)));
-                    }
-                }
-            };
-        });
+        
         EventHandler<MouseEvent> onClick = this::handleTableRowMouseDoubleClick;
         resultAdsTable.setRowFactory(param -> {
             TableRow<DataCollectionEntry> row = new TableRow<>();
@@ -98,15 +75,11 @@ public class ResultAdsListController {
 
     }
 
-<<<<<<< HEAD
     /**
      * Sets the the job ads entries from the text analysis to be displayed
      * @param dataModel
      */
     public void setDataModel(CollectionDataModel dataModel){
-=======
-    public void setDataModel(CollectionDataModel dataModel) {
->>>>>>> Filter_by_location
         resultDataModel = dataModel;
         boolean is = resultDataModel == null;
         //Set default as the first skill ads entries
@@ -116,16 +89,12 @@ public class ResultAdsListController {
         }
     }
 
-<<<<<<< HEAD
     /**
      * Called when an ad on the ads Table is clicked.
      * When double clicked, the ad is opened to display it full content
      * @param event click event
      */
     private void handleTableRowMouseDoubleClick(MouseEvent event){
-=======
-    private void handleTableRowMouseDoubleClick(MouseEvent event) {
->>>>>>> Filter_by_location
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             @SuppressWarnings("unchecked")
             TableRow<DataCollectionEntry> row = (TableRow<DataCollectionEntry>) event.getSource();
