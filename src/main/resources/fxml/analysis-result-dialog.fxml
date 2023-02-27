@@ -7,8 +7,20 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+       <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+           <Menu mnemonicParsing="false" text="File">
+               <Menu mnemonicParsing="false" text="Export">
+                   <MenuItem mnemonicParsing="false" onAction="#exportResultToCSV" text="Excel"/>
+                   <MenuItem mnemonicParsing="false" onAction="#exportResultToExcel" text="CSV"/>
+               </Menu>
+               <MenuItem mnemonicParsing="false" onAction="#close" text="Close"/>
+           </Menu>
+       </MenuBar>
       <TableView fx:id="resultTable" prefHeight="510.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="skillColumn" prefWidth="75.0" text="Skill" />
@@ -20,6 +32,9 @@
          </columnResizePolicy>
       </TableView>
       <ButtonBar prefHeight="91.0" prefWidth="600.0">
+          <buttons>
+              <Button mnemonicParsing="false" onAction="#exportResult" text="Export"/>
+          </buttons>
         <buttons>
             <Button mnemonicParsing="false" onAction="#viewResultCollection" text="View ads" />
             <Button mnemonicParsing="false" onAction="#close" text="Close" />

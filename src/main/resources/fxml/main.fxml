@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ButtonBar?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -114,8 +115,16 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button style="-fx-wrap-text: true" mnemonicParsing="false" onAction="#addEntry" text="Add entry" />
-                               <Button wrapText="true" mnemonicParsing="false" onAction="#deleteSelectedItemFromSkillsTable" text="Delete skill" />
+                               <ButtonBar>
+                                   <buttons>
+                                       <Button style="-fx-wrap-text: true" mnemonicParsing="false" onAction="#addEntry" text="Add entry" />
+                                       <Button wrapText="true" mnemonicParsing="false" onAction="#deleteSelectedItemFromSkillsTable" text="Delete skill" />
+                                   </buttons>
+                                   <padding>
+                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                   </padding>
+                               </ButtonBar>
+
                               <Label fx:id="errorMsg" text="* Enter keyword and skill" textFill="RED" visible="false">
                                  <padding>
                                     <Insets left="20.0" top="4.0" />

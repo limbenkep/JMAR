@@ -5,20 +5,25 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Optional;
 
+/**
+ * @author Kristian Angelin
+ * @author Honorine Lima
+ */
 public class AnalysisDialogController {
     private final Stage stage;
     private CollectionDataModel collectionDataModel;
     private KeywordDataModel keywordDataModel;
-
+    private ObservableList<SkillStat> stats;
+    private String fileName;
     private KeywordAnalyser analyser;
     @FXML
     private TableView<SkillStat> resultTable;
@@ -41,7 +46,7 @@ public class AnalysisDialogController {
 
         // Analyse and update table
         analyser = new KeywordAnalyser(collectionDataModel, keywordDataModel);
-        ObservableList<SkillStat> stats = analyser.analyse();
+        stats = analyser.analyse();
         resultTable.setItems(stats);
     }
 
@@ -55,11 +60,15 @@ public class AnalysisDialogController {
         stage.close();
     }
 
+    /**
+     * Opens a page that displays a table of the titles of all the ads that
+     * were a hit for each selected skill that was analysed.
+     * The different skills can be selected from a drop down list at theh top left of the page.
+     */
     @FXML
     public void viewResultCollection(){
         Stage adsViewStage = new Stage();
         ResultAdsListController controller = new ResultAdsListController(stage);
-        System.out.println("g");
         controller.setDataModel(analyser.getResultDataModel());
 
         FXMLLoader loader = new FXMLLoader();
@@ -77,5 +86,51 @@ public class AnalysisDialogController {
         adsViewStage.setScene(scene);
         adsViewStage.initStyle(StageStyle.UTILITY);
         adsViewStage.show();
+    }
+
+    /**
+     * Presents the user with options to export to excel or csv.
+     * Exports the statistics from the text analysis to a file of the chosen format
+     * and opens the FileChooser to allow the user to choose where to save the file
+     */
+    @FXML
+    public void exportResult(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Export");
+        ButtonType excel = new ButtonType("Excel");
+        ButtonType csv = new ButtonType("CSV");
+        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.setContentText("Export result to:");
+        dialog.getDialogPane().getButtonTypes().add(excel);
+        dialog.getDialogPane().getButtonTypes().add(csv);
+        dialog.getDialogPane().getButtonTypes().add(cancel);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.get() == excel){
+            ExportToExcel<SkillStat> excelResult = new ExportToExcel<>(stage);
+            excelResult.export(resultTable, analyser.getCollectionNames() );
+        } else if (result.get() == csv) {
+            ExportResultToCSV csvResult = new ExportResultToCSV(stage);
+            csvResult.saveFile(stats);
+        }
+
+    }
+
+    /**
+     * Called when export to CSV menu option is chosen
+     */
+    @FXML
+    public void exportResultToCSV(){
+        ExportResultToCSV csvResult = new ExportResultToCSV(stage);
+        csvResult.saveFile(stats);
+    }
+
+    /**
+     * Called when export to excel menu option is chosen
+     */
+    @FXML
+    public void exportResultToExcel(){
+        ExportToExcel<SkillStat> excelResult = new ExportToExcel<>(stage);
+        excelResult.export(resultTable, analyser.getCollectionNames() );
     }
 }

@@ -120,6 +120,9 @@ public class KeywordAnalyser {
     public CollectionDataModel getResultDataModel(){
         return resultDataModel;
     }
+    public String getCollectionNames(){
+        return resultSource;
+    }
     // Check for a keyword in the text by adding suffixes and extra words
     /*private boolean keywordInText(String entry, String keyword) {
         boolean found = false;
