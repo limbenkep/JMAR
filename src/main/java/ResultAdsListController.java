@@ -64,7 +64,7 @@ public class ResultAdsListController {
             String location = cellData.getValue().location();
             return new SimpleStringProperty(location == null ? "" : location);
         });
-        
+
         EventHandler<MouseEvent> onClick = this::handleTableRowMouseDoubleClick;
         resultAdsTable.setRowFactory(param -> {
             TableRow<DataCollectionEntry> row = new TableRow<>();
@@ -107,8 +107,8 @@ public class ResultAdsListController {
                 ScrollPane root = new ScrollPane();
                 Scene scene = new Scene(root, 500, 500);
                 Text text = new Text(
-                        "Ad Id: " + entry.id().replace("\"", "") + "\n"
-                                + "Title: " + entry.title().replace("\"", "") + "\n"
+                        "Ad Id: " + entry.id().replace("\"", "") + "\n\n"
+                                + "Title: " + entry.title().replace("\"", "") + "\n\n"
                                 + "Description" + "\n" + entry.text().replace("\\n", "\n").replace("\\r", "").replace("\"", ""));
                 text.wrappingWidthProperty().bind(scene.widthProperty());
                 root.setFitToWidth(true);
