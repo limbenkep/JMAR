@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
         <menus>
@@ -83,7 +84,16 @@
                          <Button fx:id="deleteCollectionButton" mnemonicParsing="false" onAction="#deleteSelectedItemFromCollectionTable" text="Delete" />
                         <Label fx:id="totalPosts" text="Total posts: 0" />
                         <Label fx:id="uniquePosts" text="Unique posts: 0" />
-                        <Button fx:id="compareButton" mnemonicParsing="false" onAction="#startCompare" text="Compare" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <ComboBox fx:id="documentPartToAnalyse" prefWidth="150.0" visibleRowCount="3">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                              <Button fx:id="compareButton" mnemonicParsing="false" onAction="#startCompare" text="Compare" />
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>
@@ -114,8 +124,8 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Button style="-fx-wrap-text: true" mnemonicParsing="false" onAction="#addEntry" text="Add entry" />
-                               <Button wrapText="true" mnemonicParsing="false" onAction="#deleteSelectedItemFromSkillsTable" text="Delete skill" />
+                              <Button mnemonicParsing="false" onAction="#addEntry" style="-fx-wrap-text: true" text="Add entry" />
+                               <Button mnemonicParsing="false" onAction="#deleteSelectedItemFromSkillsTable" text="Delete skill" wrapText="true" />
                               <Label fx:id="errorMsg" text="* Enter keyword and skill" textFill="RED" visible="false">
                                  <padding>
                                     <Insets left="20.0" top="4.0" />

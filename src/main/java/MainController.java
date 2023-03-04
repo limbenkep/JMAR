@@ -63,6 +63,9 @@ public class MainController {
     @FXML
     private Label totalUniqueSkills;
 
+    @FXML
+    private ComboBox documentPartToAnalyse;
+
     public MainController(Stage stage) {
         this.stage = stage;
         this.collectionDataModel = new CollectionDataModel();
@@ -93,6 +96,11 @@ public class MainController {
             totalKeywords.setText("Total keywords: " + keywordCollection.size());
             calculateUniqueSkills(keywordCollection);
         });
+
+        // Adding items to the combo-box to analyse ads
+        documentPartToAnalyse.getItems().addAll("Title", "Text", "Country");
+
+
     }
 
     @FXML
@@ -127,6 +135,10 @@ public class MainController {
         PDDocument document;
         PDFTextStripper stripper;
         String text;
+
+        // TODO: adding location
+        String location = "";
+
         try {
             document = PDDocument.load(pdfFile);
             stripper = new PDFTextStripper();
@@ -137,18 +149,18 @@ public class MainController {
 
         String id = String.valueOf(text.hashCode()); // Generate id for keyword to avoid duplicates
         ArrayList<DataCollectionEntry> pdfEntry = new ArrayList<>();
-        pdfEntry.add(new DataCollectionEntry(id, pdfFile.getName(), text, LocalDateTime.now()));
+        pdfEntry.add(new DataCollectionEntry(id, pdfFile.getName(), text, LocalDateTime.now(), location));
         // Add keyword to collection
         collectionDataModel.addDataCollection(new DataCollection(pdfFile.getName(),
-                                        pdfEntry,
-                                        "PDF-file",
-                                        LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)));
+                pdfEntry,
+                "PDF-file",
+                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)));
     }
 
     private void calculateUniquePosts(ObservableList<DataCollection> list) {
         Set<String> unique = new HashSet<>(collectionDataModel.getTotalPosts());
-        for (DataCollection collection: list) {
-            for(DataCollectionEntry entry  : collection.dataEntries()) {
+        for (DataCollection collection : list) {
+            for (DataCollectionEntry entry : collection.dataEntries()) {
                 unique.add(entry.id());
             }
         }
@@ -157,7 +169,7 @@ public class MainController {
 
     private void calculateUniqueSkills(ObservableList<KeywordCollection> list) {
         Set<String> unique = new HashSet<>(collectionDataModel.getTotalPosts());
-        for (KeywordCollection collection: list) {
+        for (KeywordCollection collection : list) {
             unique.add(collection.skill());
         }
         totalUniqueSkills.setText("Total unique skills: " + unique.size());
@@ -165,7 +177,7 @@ public class MainController {
 
     @FXML
     private void startCompare() {
-        if(!dataTable.getItems().isEmpty() && !keywordTable.getItems().isEmpty()) {
+        if (!dataTable.getItems().isEmpty() && !keywordTable.getItems().isEmpty()) {
             Stage dialogStage = new Stage();
             AnalysisDialogController controller = new AnalysisDialogController(dialogStage);
             controller.setDataModels(collectionDataModel, keywordDataModel);
@@ -195,11 +207,11 @@ public class MainController {
     private void tableKeyPressed(KeyEvent event) {
         // Delete selected keyword
         System.out.println("SOURCE: " + event.getSource());
-        if(event.getCode().equals(KeyCode.DELETE)) {
-            if(event.getSource() == keywordTable) {
+        if (event.getCode().equals(KeyCode.DELETE)) {
+            if (event.getSource() == keywordTable) {
                 KeywordCollection selected = keywordTable.getSelectionModel().getSelectedItem();
                 keywordDataModel.removeEntry(selected);
-            } else if(event.getSource() == dataTable) {
+            } else if (event.getSource() == dataTable) {
                 DataCollection selected = dataTable.getSelectionModel().getSelectedItem();
                 collectionDataModel.removeEntry(selected);
             }
@@ -210,7 +222,7 @@ public class MainController {
     @FXML
     private void addEntry() {
         // Check that TextFields are not empty
-        if(!keywordEntry.getText().isBlank() && !skillEntry.getText().isBlank()) {
+        if (!keywordEntry.getText().isBlank() && !skillEntry.getText().isBlank()) {
             keywordDataModel.addEntry(new KeywordCollection(keywordEntry.getText(), skillEntry.getText()));
             errorMsg.setVisible(false);
         } else {
@@ -248,34 +260,35 @@ public class MainController {
     }
 
     @FXML
-    private void clearCollection(){
+    private void clearCollection() {
         collectionDataModel.clearDataModel();
     }
+
     @FXML
-    private void saveAndClearCollection(){
+    private void saveAndClearCollection() {
         saveCollection();
         collectionDataModel.clearDataModel();
     }
 
     @FXML
-    private void clearSkillKeywords(){
+    private void clearSkillKeywords() {
         keywordDataModel.clearKeyWordCollection();
     }
 
     @FXML
-    private void saveAndClearSkillKeywords(){
+    private void saveAndClearSkillKeywords() {
         saveSkillKeywordsAs();
         keywordDataModel.clearKeyWordCollection();
     }
 
     @FXML
-    private void deleteSelectedItemFromCollectionTable(){
+    private void deleteSelectedItemFromCollectionTable() {
         DataCollection selectedItem = dataTable.getSelectionModel().getSelectedItem();
         dataTable.getItems().remove(selectedItem);
     }
 
     @FXML
-    private void deleteSelectedItemFromSkillsTable(){
+    private void deleteSelectedItemFromSkillsTable() {
         KeywordCollection selectedItem = keywordTable.getSelectionModel().getSelectedItem();
         keywordTable.getItems().remove(selectedItem);
     }
