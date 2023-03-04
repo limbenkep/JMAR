@@ -33,7 +33,6 @@
       </TableView>
       <ButtonBar prefHeight="91.0" prefWidth="600.0">
           <buttons>
-              <Button mnemonicParsing="false" onAction="#compareSkillCombination" text="Analyze skill combinations"/>
               <Button mnemonicParsing="false" onAction="#exportResult" text="Export"/>
           </buttons>
         <buttons>

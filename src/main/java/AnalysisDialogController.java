@@ -137,8 +137,4 @@ public class AnalysisDialogController {
         excelResult.export(resultTable, analyser.getCollectionNames() );
     }
 
-    @FXML
-    public void compareSkillCombination(){
-        
-    }
 }
