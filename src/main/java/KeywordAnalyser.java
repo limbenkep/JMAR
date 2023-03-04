@@ -115,10 +115,8 @@ public class KeywordAnalyser {
                     skillsString.append(s).append(", ");
                 }
                 skillsString.delete(skillsString.length()-2, skillsString.length()-1);
-                //ArrayList<String> commonEntries ;
                 List<String> commonEntries = new ArrayList<>(listsToCompare.get(0));
                 for(int i= 1; i<listsToCompare.size(); i++){
-                    //commonEntries.removeAll(listsToCompare.get(i));
                     commonEntries = commonEntries.stream().filter(listsToCompare.get(i)::contains).collect(Collectors.toList());
                 }
                 int count = commonEntries.size();
