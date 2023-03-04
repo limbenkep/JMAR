@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,6 +31,8 @@ public class MainController {
     private final CollectionDataModel collectionDataModel;
     private final KeywordDataModel keywordDataModel;
     private final Stage stage;
+    private ObservableList<String> skills;
+    private final ObservableList<ArrayList<String>> skillCombinations;
     @FXML
     private TableView<DataCollection> dataTable;
     @FXML
@@ -67,6 +70,7 @@ public class MainController {
         this.stage = stage;
         this.collectionDataModel = new CollectionDataModel();
         this.keywordDataModel = new KeywordDataModel();
+        this.skillCombinations = FXCollections.observableArrayList();
     }
 
     @FXML
@@ -172,7 +176,7 @@ public class MainController {
         if(!dataTable.getItems().isEmpty() && !keywordTable.getItems().isEmpty()) {
             Stage dialogStage = new Stage();
             AnalysisDialogController controller = new AnalysisDialogController(dialogStage);
-            controller.setDataModels(collectionDataModel, keywordDataModel);
+            controller.setDataModels(collectionDataModel, keywordDataModel, skillCombinations);
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/analysis-result-dialog.fxml"));
@@ -282,6 +286,40 @@ public class MainController {
     private void deleteSelectedItemFromSkillsTable(){
         KeywordCollection selectedItem = keywordTable.getSelectionModel().getSelectedItem();
         keywordTable.getItems().remove(selectedItem);
+    }
+
+    @FXML
+    private void addSkillCombinations(){
+        Stage skillStage = new Stage();
+        SkillCombinationsController controller = new SkillCombinationsController(skillStage);
+        ObservableList<KeywordCollection> items = keywordTable.getItems();
+        ObservableList<String> skills = FXCollections.observableArrayList();
+        for(KeywordCollection item: items){
+            String skill = item.skill();
+            if(!skills.contains(skill)){
+                skills.add(item.skill());
+                System.out.println("Skills: " + skill);
+            }
+        }
+        controller.setSkillOptions(skills, skillCombinations);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/skill-combinations.fxml"));
+        loader.setController(controller);
+
+        Scene scene = null;
+        try {
+            scene = new Scene(loader.<VBox>load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        skillStage.setTitle("Search data");
+        skillStage.initModality(Modality.WINDOW_MODAL);
+        skillStage.initOwner(stage);
+        skillStage.setScene(scene);
+        skillStage.initStyle(StageStyle.UTILITY);
+        skillStage.show();
     }
 
 }

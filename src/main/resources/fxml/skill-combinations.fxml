@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.controlsfx.control.CheckComboBox?>
+<?import javafx.geometry.Insets?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="440.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+    <SplitPane dividerPositions="0.4" VBox.vgrow="ALWAYS">
+        <VBox>
+            <Label text="Select skill combination"/>
+            <HBox>
+                <CheckComboBox fx:id="skillsChoices"/>
+                <Button onAction="#addSkillCombination" text="Add"/>
+            </HBox>
+        </VBox>
+        <VBox>
+            <Label text="Select skill combination"/>
+            <ListView fx:id="skillCombinationList"/>
+            <ButtonBar>
+                <buttons>
+                    <Button wrapText="true" mnemonicParsing="false" onAction="#close" text="Close" />
+                </buttons>
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+            </ButtonBar>
+
+        </VBox>
+    </SplitPane>
+</VBox>
