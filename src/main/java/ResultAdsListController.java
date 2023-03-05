@@ -1,4 +1,6 @@
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -54,6 +56,7 @@ public class ResultAdsListController {
 
     @FXML
     public void initialize() {
+        resultCollectionOptions.setEditable(true);
         resultCollectionOptions.setItems(comboboxOptions);
         resultCollectionOptions.getSelectionModel().selectFirst();
         resultAdsTable.setItems(adsEntries);
@@ -71,7 +74,11 @@ public class ResultAdsListController {
             row.setOnMouseClicked(onClick);
             return row;
         });
-
+        resultCollectionOptions.valueProperty().addListener((observableValue, s, t1) -> {
+            int index = comboboxOptions.indexOf(t1);
+            adsEntries = FXCollections.observableArrayList(resultDataModel.getDataCollections().get(index).dataEntries());
+            resultAdsTable.setItems(adsEntries);
+        });
 
     }
 
@@ -91,7 +98,7 @@ public class ResultAdsListController {
 
     /**
      * Called when an ad on the ads Table is clicked.
-     * When double clicked, the ad is opened to display it full content
+     * When double-clicked, the ad is opened to display it full content
      * @param event click event
      */
     private void handleTableRowMouseDoubleClick(MouseEvent event){

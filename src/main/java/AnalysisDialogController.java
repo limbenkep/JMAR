@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -25,6 +26,7 @@ public class AnalysisDialogController {
     private ObservableList<SkillStat> stats;
     private String fileName;
     private KeywordAnalyser analyser;
+    private ObservableList<ArrayList<String>> skillCombinations;
     @FXML
     private TableView<SkillStat> resultTable;
     @FXML
@@ -45,14 +47,15 @@ public class AnalysisDialogController {
         percentageColumn.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().percentage()).asObject());
 
         // Analyse and update table
-        analyser = new KeywordAnalyser(collectionDataModel, keywordDataModel);
+        analyser = new KeywordAnalyser(collectionDataModel, keywordDataModel, skillCombinations);
         stats = analyser.analyse();
         resultTable.setItems(stats);
     }
 
-    public void setDataModels(CollectionDataModel collectionDataModel, KeywordDataModel keywordDataModel) {
+    public void setDataModels(CollectionDataModel collectionDataModel, KeywordDataModel keywordDataModel, ObservableList<ArrayList<String>> skillCombinations) {
         this.collectionDataModel = collectionDataModel;
         this.keywordDataModel = keywordDataModel;
+        this.skillCombinations = skillCombinations;
     }
 
     @FXML
@@ -133,4 +136,5 @@ public class AnalysisDialogController {
         ExportToExcel<SkillStat> excelResult = new ExportToExcel<>(stage);
         excelResult.export(resultTable, analyser.getCollectionNames() );
     }
+
 }
