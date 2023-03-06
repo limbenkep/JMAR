@@ -65,6 +65,9 @@ public class MainController {
     private Label totalKeywords;
     @FXML
     private Label totalUniqueSkills;
+    @FXML
+    ComboBox partToSearch_Combobox;
+
 
     public MainController(Stage stage) {
         this.stage = stage;
@@ -97,6 +100,11 @@ public class MainController {
             totalKeywords.setText("Total keywords: " + keywordCollection.size());
             calculateUniqueSkills(keywordCollection);
         });
+
+        // Adding fields to partToSearch_Combobox
+        partToSearch_Combobox.getItems().addAll("Text", "Title", "Location");
+        partToSearch_Combobox.setValue("Text");
+
     }
 
     @FXML
@@ -177,6 +185,7 @@ public class MainController {
             Stage dialogStage = new Stage();
             AnalysisDialogController controller = new AnalysisDialogController(dialogStage);
             controller.setDataModels(collectionDataModel, keywordDataModel, skillCombinations);
+            controller.setSearchPart(partToSearch_Combobox.getSelectionModel().getSelectedItem().toString());
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/fxml/analysis-result-dialog.fxml"));

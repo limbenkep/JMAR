@@ -22,6 +22,7 @@ import java.util.Optional;
 public class AnalysisDialogController {
     private final Stage stage;
     private CollectionDataModel collectionDataModel;
+    private String searchPart;
     private KeywordDataModel keywordDataModel;
     private ObservableList<SkillStat> stats;
     private String fileName;
@@ -48,7 +49,7 @@ public class AnalysisDialogController {
 
         // Analyse and update table
         analyser = new KeywordAnalyser(collectionDataModel, keywordDataModel, skillCombinations);
-        stats = analyser.analyse();
+        stats = analyser.analyse(searchPart);
         resultTable.setItems(stats);
     }
 
@@ -56,6 +57,11 @@ public class AnalysisDialogController {
         this.collectionDataModel = collectionDataModel;
         this.keywordDataModel = keywordDataModel;
         this.skillCombinations = skillCombinations;
+    }
+
+    public void setSearchPart(String search_part)
+    {
+        this.searchPart = search_part;
     }
 
     @FXML

@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -84,7 +86,16 @@
                          <Button fx:id="deleteCollectionButton" mnemonicParsing="false" onAction="#deleteSelectedItemFromCollectionTable" text="Delete" />
                         <Label fx:id="totalPosts" text="Total posts: 0" />
                         <Label fx:id="uniquePosts" text="Unique posts: 0" />
+                      <HBox prefHeight="100.0" prefWidth="200.0">
+                      <children>
+                          <ComboBox fx:id="partToSearch_Combobox" prefWidth="150.0" visibleRowCount="3">
+                              <HBox.margin>
+                                  <Insets right="10.0" />
+                              </HBox.margin>
+                          </ComboBox>
                         <Button fx:id="compareButton" mnemonicParsing="false" onAction="#startCompare" text="Compare" />
+                     </children>
+                      </HBox>
                      </children>
                   </VBox>
                </children>

@@ -41,7 +41,7 @@ public class KeywordAnalyser {
         this.skillsList = new ArrayList<>();
         this.entryID = new ArrayList<>();
     }
-    public ObservableList<SkillStat> analyse() {
+    public ObservableList<SkillStat> analyse(String searchPart) {
         // For each DataCollection (ex. a search result or file)
         for(DataCollection collection : collectionDataModel.getDataCollections()) {
             resultSource = resultSource + " " + collection.title();
@@ -55,9 +55,15 @@ public class KeywordAnalyser {
                     for (KeywordCollection keywordCollection: keywordDataModel.getKeywordCollections()) {
                         // Skip if skill already stored
                         if(!skills.contains(keywordCollection.skill())) {
+                            // add the search part (title, text, location)
+                            String searchPartInAds = "";
+                            if(searchPart.contains("Text")) searchPartInAds = entry.text().toLowerCase();
+                            else if(searchPart.contains("Title")) searchPartInAds = entry.title().toLowerCase();
+                            else if(searchPart.contains("Location")) searchPartInAds = entry.location().toLowerCase();
+
+
                             // Check if keyword is in text, and add to stats
-                            if(keywordInText(entry.text().toLowerCase(), keywordCollection.keyword().toLowerCase())) {
-                            //if(entry.text().toLowerCase().contains(keywordCollection.keyword().toLowerCase())) {
+                            if(keywordInText(searchPartInAds, keywordCollection.keyword().toLowerCase())) {
                                 skills.add(keywordCollection.skill()); // Store skill
                                 int count = 1;
                                 SkillStat newStat = new SkillStat(keywordCollection.skill(), count, 0); // TODO: NEEDED?
