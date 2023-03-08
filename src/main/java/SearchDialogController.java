@@ -20,6 +20,8 @@ public class SearchDialogController {
     private final String[] searchMethods = {jobSearchAPI, historicalAdsAPI};
     private final LocalDate dateFromRestriction = LocalDate.of(2016, 1, 1);
     private final LocalDate dateToRestriction = LocalDate.now();
+    private final LocalDate dateToRestriction_Historical = LocalDate.of(2023,1,13);
+
     @FXML
     private ComboBox<String> comboBox;
     @FXML
@@ -48,32 +50,39 @@ public class SearchDialogController {
 
     @FXML
     public void initialize() {
-        ObservableList<String> options = FXCollections.observableArrayList(searchMethods);
+        ObservableList<String> options =
+                FXCollections.observableArrayList(searchMethods);
         comboBox.setItems(options);
-        disableInvalidDates(dateFrom);
-        disableInvalidDates(dateTo);
-
-
-        // Enabling Search Button after Entering Text in searchfield and selecting two dates
-        BooleanBinding isButtonEnabled = Bindings.createBooleanBinding(() -> {
-            boolean isTextNotEmpty = !searchField.getText().isEmpty();
-            boolean areDatesSelected = dateFrom.getValue() != null && dateTo.getValue() != null;
-            return isTextNotEmpty && areDatesSelected;
-        }, searchField.textProperty(), dateFrom.valueProperty(), dateTo.valueProperty());
-
-        // Bind the button's visible property to the BooleanBinding
-        searchButton.disableProperty().bind(isButtonEnabled.not());
+        searchField.textProperty().addListener((observer, oldText, newText) -> {
+            searchButton.setDisable(newText.isEmpty());
+        });
 
     }
+
 
     // Only shows dates between 2016-2021 (API restriction)
     private void disableInvalidDates(DatePicker datePicker) {
         datePicker.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                setDisable(empty || date.compareTo(dateFromRestriction) < 0 || date.compareTo(dateToRestriction) > 0);
+                setDisable(empty ||
+                        date.compareTo(dateFromRestriction) < 0 ||
+                        date.compareTo(dateToRestriction) > 0);
             }
         });
+        datePicker.setValue(dateToRestriction);
+    }
+
+    private void disableInvalidDates_Historical(DatePicker datePicker) {
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty ||
+                        date.compareTo(dateFromRestriction) < 0 ||
+                        date.compareTo(dateToRestriction_Historical) > 0);
+            }
+        });
+        datePicker.setValue(dateToRestriction_Historical);
     }
 
     // Show search properties when a search method is selected.
@@ -81,12 +90,17 @@ public class SearchDialogController {
     public void selectSearchMethod() {
         searchProperties.setVisible(true);
         if (Objects.equals(comboBox.getValue(), jobSearchAPI)) {
+            disableInvalidDates(dateFrom);
+            disableInvalidDates(dateTo);
             dateFrom.setVisible(true);      // converted from false to true
             dateTo.setVisible(true);        // converted from false to true
             labelDateFrom.setVisible(true);
             labelDateTo.setVisible(true);
 
         } else if (Objects.equals(comboBox.getValue(), historicalAdsAPI)) {
+            disableInvalidDates_Historical(dateFrom);
+            disableInvalidDates_Historical(dateTo);
+
             dateFrom.setVisible(true);
             dateTo.setVisible(true);
             labelDateFrom.setVisible(true);
