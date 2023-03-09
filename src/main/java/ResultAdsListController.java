@@ -44,6 +44,11 @@ public class ResultAdsListController {
     private TextField locationTextField;
 
     @FXML
+    private TextField titleTextField;
+    @FXML
+    private TextField textTextField;
+
+    @FXML
     private TableColumn<DataCollectionEntry, String> titleColumn;
 
     @FXML
@@ -135,13 +140,18 @@ public class ResultAdsListController {
     }
 
     @FXML
-    public void filterResultsByLocation()
+    public void filterResults()
     {
         String locationWordToFilter = locationTextField.getText().toLowerCase();
+        String titleWordToFilter = titleTextField.getText().toLowerCase();
+        String textWordToFilter = textTextField.getText().toLowerCase();
+
 
         ObservableList<DataCollectionEntry> filteredEntries = FXCollections.observableArrayList();
         for (DataCollectionEntry entry : adsEntries) {
-            if (entry.location().toLowerCase().contains(locationWordToFilter)) {
+            if (entry.location().toLowerCase().contains(locationWordToFilter) &&
+                    entry.text().toLowerCase().contains(textWordToFilter) &&
+                    entry.title().toLowerCase().contains(titleWordToFilter)) {
                 filteredEntries.add(entry);
             }
         }

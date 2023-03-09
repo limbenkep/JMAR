@@ -9,12 +9,6 @@
           <children>
               <Label text="Select result collection" />
               <ComboBox fx:id="resultCollectionOptions" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <TextField fx:id="locationTextField" promptText="Location" GridPane.columnIndex="3">
-               <GridPane.margin>
-                  <Insets left="40.0" right="10.0" />
-               </GridPane.margin>
-            </TextField>
-            <Button mnemonicParsing="false" onAction="#filterResultsByLocation" text="Filter" GridPane.columnIndex="4" />
           </children>
          <columnConstraints>
             <ColumnConstraints />
@@ -39,6 +33,10 @@
        </TableView>
        <ButtonBar prefHeight="91.0" prefWidth="600.0">
            <buttons>
+               <TextField fx:id="titleTextField" promptText="Title" />
+               <TextField fx:id="textTextField" promptText="Text" />
+               <TextField fx:id="locationTextField" promptText="Location" />
+               <Button mnemonicParsing="false" onAction="#filterResults" text="Filter" />
                <Button mnemonicParsing="false" onAction="#close" text="Close" />
            </buttons>
            <padding>
