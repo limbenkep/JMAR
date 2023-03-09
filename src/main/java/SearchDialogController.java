@@ -18,6 +18,8 @@ public class SearchDialogController {
     private final String[] searchMethods = {  jobSearchAPI, historicalAdsAPI };
     private final LocalDate dateFromRestriction = LocalDate.of(2016,1,1);
     private final LocalDate dateToRestriction = LocalDate.now();
+    private final LocalDate dateToRestriction_Historical = LocalDate.of(2023,1,13);
+
     @FXML
     private ComboBox<String> comboBox;
     @FXML
@@ -52,8 +54,7 @@ public class SearchDialogController {
         searchField.textProperty().addListener((observer, oldText, newText) -> {
             searchButton.setDisable(newText.isEmpty());
         });
-        disableInvalidDates(dateFrom);
-        disableInvalidDates(dateTo);
+
     }
 
     // Only shows dates between 2016-2021 (API restriction)
@@ -66,19 +67,38 @@ public class SearchDialogController {
                         date.compareTo(dateToRestriction) > 0);
             }
         });
+        datePicker.setValue(dateToRestriction);
     }
+
+    private void disableInvalidDates_Historical(DatePicker datePicker) {
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty ||
+                        date.compareTo(dateFromRestriction) < 0 ||
+                        date.compareTo(dateToRestriction_Historical) > 0);
+            }
+        });
+        datePicker.setValue(dateToRestriction_Historical);
+    }
+
 
     // Show search properties when a search method is selected.
     @FXML
     public void selectSearchMethod() {
         searchProperties.setVisible(true);
         if(Objects.equals(comboBox.getValue(), jobSearchAPI)) {
+            disableInvalidDates(dateFrom);
+            disableInvalidDates(dateTo);
             dateFrom.setVisible(true);      // converted from false to true
             dateTo.setVisible(true);        // converted from false to true
             labelDateFrom.setVisible(true);
             labelDateTo.setVisible(true);
 
         } else if (Objects.equals(comboBox.getValue(), historicalAdsAPI)) {
+            disableInvalidDates_Historical(dateFrom);
+            disableInvalidDates_Historical(dateTo);
+
             dateFrom.setVisible(true);
             dateTo.setVisible(true);
             labelDateFrom.setVisible(true);
