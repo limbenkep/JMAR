@@ -26,6 +26,7 @@
            <columns>
                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
                <TableColumn fx:id="locationColumn" prefWidth="75.0" text="Location" />
+               <TableColumn fx:id="dateColumn" prefWidth="75.0" text="Publication Date" />
            </columns>
            <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

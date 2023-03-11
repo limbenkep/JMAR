@@ -57,6 +57,9 @@ public class ResultAdsListController {
     private TableColumn<DataCollectionEntry, String> locationColumn;
 
     @FXML
+    private TableColumn<DataCollectionEntry, String> dateColumn;
+
+    @FXML
     private CheckBox Title_CheckBox;
     @FXML
     private CheckBox Description_CheckBox;
@@ -77,6 +80,8 @@ public class ResultAdsListController {
         resultCollectionOptions.getSelectionModel().selectFirst();
         resultAdsTable.setItems(adsEntries);
         titleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().title()));
+        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().date().toLocalDate().toString()));
+
 
         // Adding Locations to the Table (if location is null --> convert to "")
         locationColumn.setCellValueFactory(cellData -> {
