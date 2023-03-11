@@ -1,3 +1,5 @@
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -54,6 +56,15 @@ public class ResultAdsListController {
     @FXML
     private TableColumn<DataCollectionEntry, String> locationColumn;
 
+    @FXML
+    private CheckBox Title_CheckBox;
+    @FXML
+    private CheckBox Description_CheckBox;
+    @FXML
+    private TextField furtherAnalysisKeyword_TextField;
+    @FXML
+    private Button furtherAnalysis_Button;
+
     public ResultAdsListController(Stage stage) {
         this.stage = stage;
         comboboxOptions = FXCollections.observableArrayList();
@@ -85,6 +96,36 @@ public class ResultAdsListController {
             resultAdsTable.setItems(adsEntries);
         });
 
+        ShowAnalyzeButtonWhenSelecting();
+
+    }
+
+    private void ShowAnalyzeButtonWhenSelecting() {
+        // Create a BooleanProperty to represent whether the button should be enabled
+        BooleanProperty isButtonEnabled = new SimpleBooleanProperty(false);
+
+// Add a listener to the textField to update the isButtonEnabled property
+        furtherAnalysisKeyword_TextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateButtonState(isButtonEnabled, furtherAnalysisKeyword_TextField, Title_CheckBox, Description_CheckBox);
+        });
+
+        // Add listeners to the checkBox objects to update the isButtonEnabled property
+        Title_CheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            updateButtonState(isButtonEnabled, furtherAnalysisKeyword_TextField, Title_CheckBox, Description_CheckBox);
+        });
+        Description_CheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            updateButtonState(isButtonEnabled, furtherAnalysisKeyword_TextField, Title_CheckBox, Description_CheckBox);
+        });
+
+        // Set the initial state of the button
+        furtherAnalysis_Button.disableProperty().bind(isButtonEnabled.not());
+
+    }
+
+    private void updateButtonState(BooleanProperty isButtonEnabled, TextField textField, CheckBox checkBox1, CheckBox checkBox2) {
+        boolean textFieldNotEmpty = !textField.getText().isEmpty();
+        boolean checkBoxSelected = checkBox1.isSelected() || checkBox2.isSelected();
+        isButtonEnabled.set(textFieldNotEmpty && checkBoxSelected);
     }
 
     /**
@@ -159,5 +200,54 @@ public class ResultAdsListController {
         resultAdsTable.setItems(filteredEntries);
 
     }
+
+    @FXML
+    public void performFurtherAnalysis() {
+        boolean titleSelected = Title_CheckBox.isSelected();
+        boolean descriptionSelected = Description_CheckBox.isSelected();
+        String keyword = furtherAnalysisKeyword_TextField.getText().toLowerCase();
+
+        // Required:
+        // Take keyword, and two selections, open new analyze page and insert results
+        ObservableList<DataCollectionEntry> furtherAnalysisResults = FXCollections.observableArrayList();
+
+
+        for (DataCollectionEntry entry : adsEntries) {
+            if (titleSelected && descriptionSelected) {
+                if (entry.title().toLowerCase().contains(keyword) || entry.text().toLowerCase().contains(keyword))
+                    furtherAnalysisResults.add(entry);
+
+            } else if (titleSelected && !descriptionSelected) {
+                if (entry.title().toLowerCase().contains(keyword))
+                    furtherAnalysisResults.add(entry);
+            } else if (!titleSelected && descriptionSelected) {
+                if (entry.text().toLowerCase().contains(keyword))
+                    furtherAnalysisResults.add(entry);
+            }
+        }
+
+
+        Stage adsViewStage = new Stage();
+        FurtherAnalysisController controller = new FurtherAnalysisController(stage);
+        controller.setDataModel(furtherAnalysisResults);
+        controller.setKeyword(keyword);
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/fxml/furtherAnalysis.fxml"));
+        loader.setController(controller);
+        Scene scene;
+        try {
+            scene = new Scene(loader.<VBox>load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        adsViewStage.setTitle("Analyse Results (Keyword: '" + keyword + "')");
+        adsViewStage.initModality(Modality.WINDOW_MODAL);
+        adsViewStage.initOwner(stage);
+        adsViewStage.setScene(scene);
+        adsViewStage.initStyle(StageStyle.UTILITY);
+        adsViewStage.show();
+    }
+
 
 }
