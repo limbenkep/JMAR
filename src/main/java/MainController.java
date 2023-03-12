@@ -314,7 +314,7 @@ public class MainController {
             throw new RuntimeException(e);
         }
 
-        skillStage.setTitle("Search data");
+        skillStage.setTitle("Skill combinations");
         skillStage.initModality(Modality.WINDOW_MODAL);
         skillStage.initOwner(stage);
         skillStage.setScene(scene);

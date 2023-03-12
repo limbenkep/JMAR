@@ -119,10 +119,10 @@
                                    <buttons>
                                        <Button style="-fx-wrap-text: true" mnemonicParsing="false" onAction="#addEntry" text="Add entry" />
                                        <Button wrapText="true" mnemonicParsing="false" onAction="#deleteSelectedItemFromSkillsTable" text="Delete skill" />
-                                       <Button wrapText="true" mnemonicParsing="false" onAction="#addSkillCombinations" text="Add combinations" />
+                                       <Button wrapText="true" mnemonicParsing="false" onAction="#addSkillCombinations" text="Combinations" />
                                    </buttons>
                                    <padding>
-                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       <Insets bottom="10.0" left="2.0" right="2.0" top="10.0" />
                                    </padding>
                                </ButtonBar>
 
